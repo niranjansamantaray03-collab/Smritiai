@@ -1,0 +1,89 @@
+name: SmritiAI Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "SmritiAI_Source.zip"
+      - ".github/workflows/smritiai-apk.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract SmritiAI source
+        run: |
+          rm -rf smritiai_build
+          mkdir smritiai_build
+          unzip -q SmritiAI_Source.zip -d smritiai_build
+
+          echo "Extracted project:"
+          ls -la smritiai_build
+
+          test -f smritiai_build/pubspec.yaml
+          test -d smritiai_build/lib
+          test -d smritiai_build/android
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Flutter doctor
+        working-directory: smritiai_build
+        run: flutter doctor -v
+
+      - name: Get dependencies
+        working-directory: smritiai_build
+        run: flutter pub get
+
+      - name: Analyze project
+        working-directory: smritiai_build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          flutter analyze
+
+      - name: Run tests
+        working-directory: smritiai_build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          flutter test
+
+      - name: Build debug APK
+        working-directory: smritiai_build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          flutter build apk --debug \
+            --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+            --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY" \
+            --dart-define=SMRITIAI_ENV=production
+
+      - name: Rename APK
+        run: |
+          mkdir -p release
+          cp smritiai_build/build/app/outputs/flutter-apk/app-debug.apk \
+             release/SmritiAI-debug.apk
+
+      - name: Upload SmritiAI APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmritiAI-debug-apk
+          path: release/SmritiAI-debug.apk
+          if-no-files-found: error
