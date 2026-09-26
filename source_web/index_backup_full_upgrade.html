@@ -1,0 +1,1536 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SmritiAI | Cognitive Care & Memory Assistance</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;
+ background:#07111f;color:#e8eef7;display:flex;min-height:100vh
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.sidebar{
+ width:245px;background:#0b1728;border-right:1px solid #20324a;
+ padding:22px 14px;position:fixed;left:0;top:0;bottom:0
+}
+.logo{font-size:23px;font-weight:800;padding:5px 12px 25px}
+.logo span{color:#65d9ff}
+.nav button{
+ width:100%;border:0;background:transparent;color:#9eafc5;
+ text-align:left;padding:13px 14px;border-radius:11px;margin:3px 0
+}
+.nav button:hover,.nav button.active{background:#162a43;color:#fff}
+.main{margin-left:245px;width:calc(100% - 245px);padding:30px;max-width:1500px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+h1{font-size:31px;margin:0 0 7px}
+.sub{color:#8ea1b9}
+.status{padding:9px 14px;background:#102c28;color:#63e6be;border-radius:30px;font-size:13px}
+.page{display:none}
+.page.active{display:block}
+.hero{
+ background:linear-gradient(135deg,#112b49,#13203a);
+ border:1px solid #294360;border-radius:22px;padding:30px;
+ display:flex;justify-content:space-between;gap:25px;align-items:center
+}
+.hero h2{font-size:30px;margin:0 0 10px}
+.hero p{color:#aabbd0;max-width:700px;line-height:1.6}
+.primary{
+ border:0;border-radius:12px;padding:13px 20px;
+ background:#55c9f5;color:#04101c;font-weight:800
+}
+.secondary{
+ border:1px solid #304760;background:#13263c;color:#dce8f4;
+ border-radius:11px;padding:11px 17px
+}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:20px 0}
+.card{
+ background:#0d1b2d;border:1px solid #21364e;border-radius:17px;padding:20px
+}
+.metric{font-size:30px;font-weight:800;margin:10px 0 5px}
+.label{color:#8da0b7;font-size:14px}
+.progress{height:7px;background:#203248;border-radius:20px;margin-top:14px;overflow:hidden}
+.progress i{display:block;height:100%;background:#58c8f2;border-radius:20px}
+.section-title{font-size:21px;font-weight:750;margin:28px 0 14px}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.action{padding:20px;text-align:left}
+.action strong{display:block;font-size:18px;margin-bottom:7px}
+.action small{color:#8fa3ba}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.form{
+ background:#0d1b2d;border:1px solid #21364e;border-radius:17px;padding:24px;
+ margin-bottom:18px
+}
+input{
+ width:100%;padding:12px;border-radius:10px;border:1px solid #30465d;
+ background:#071421;color:white;margin:7px 0 13px
+}
+.question{font-size:18px;margin-bottom:16px}
+.option{
+ width:100%;padding:13px;text-align:left;margin:7px 0;
+ border:1px solid #30465d;background:#101f32;color:#dce7f2;border-radius:10px
+}
+.option:hover{border-color:#5acaf5}
+.option.correct{background:#123d34;border-color:#45d4aa}
+.option.wrong{background:#442327;border-color:#f27878}
+.result{
+ padding:17px;border-radius:12px;background:#102438;margin-top:15px
+}
+.memory{
+ display:flex;justify-content:space-between;gap:15px;align-items:center;
+ padding:16px;border-bottom:1px solid #21364e
+}
+.memory:last-child{border-bottom:0}
+.memory-title{font-weight:700}
+.memory-meta{font-size:13px;color:#8498af;margin-top:5px}
+.routine{
+ display:flex;align-items:center;gap:14px;padding:15px 5px;
+ border-bottom:1px solid #20344b
+}
+.routine input{width:20px;height:20px;margin:0}
+.done{text-decoration:line-through;color:#71849a}
+.chat{
+ height:380px;overflow:auto;background:#071421;
+ border:1px solid #21364e;border-radius:15px;padding:18px
+}
+.msg{max-width:80%;padding:12px 15px;border-radius:14px;margin:8px 0;line-height:1.45}
+.ai{background:#142c42}
+.user{background:#15506b;margin-left:auto}
+.chatbar{display:flex;gap:10px;margin-top:10px}
+.chatbar input{margin:0}
+.voice{
+ border:0;background:#173a52;color:#65d9ff;border-radius:11px;padding:0 18px
+}
+table{width:100%;border-collapse:collapse}
+td,th{text-align:left;padding:13px;border-bottom:1px solid #20344b}
+.badge{padding:5px 9px;border-radius:20px;background:#123d34;color:#5ce1bd;font-size:12px}
+.notice{
+ border-left:4px solid #55c9f5;background:#0c2033;
+ padding:16px;margin:15px 0;color:#b5c7d9;line-height:1.6
+}
+.bigscore{font-size:48px;font-weight:850}
+@media(max-width:900px){
+ .sidebar{width:70px}.logo{font-size:0}.logo span{font-size:20px}
+ .nav button{font-size:0;text-align:center}.nav button:first-letter{font-size:20px}
+ .main{margin-left:70px;width:calc(100% - 70px);padding:18px}
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+ <div class="logo">Smriti<span>AI</span></div>
+ <div class="nav">
+  <button onclick="showPage('home')" class="active">🏠 Home</button>
+  <button onclick="showPage('baseline')">🧠 Baseline</button>
+  <button onclick="showPage('games')">🎮 Cognitive Games</button>
+  <button onclick="showPage('memories')">💭 Memory Lane</button>
+  <button onclick="showPage('day')">📅 My Day</button>
+  <button onclick="showPage('assistant')">🎙️ Smriti Assistant</button>
+  <button onclick="showPage('caregiver')">👨‍👩‍👧 Caregiver</button>
+  <button onclick="showPage('responsible')">🛡️ Responsible AI</button>
+ </div>
+</aside>
+
+<main class="main">
+
+<div class="top">
+ <div>
+  <h1 id="pageTitle">Good day 👋</h1>
+  <div class="sub">AI-powered cognitive support & memory assistance</div>
+ </div>
+ <div class="status">● Prototype Online</div>
+</div>
+
+<!-- HOME -->
+<section id="home" class="page active">
+ <div class="hero">
+  <div>
+   <h2>Welcome to SmritiAI</h2>
+   <p>
+    A personalized cognitive support platform designed to assist with
+    memory, routine management, cognitive stimulation and caregiver insights.
+   </p>
+   <button class="primary" onclick="showPage('assistant');speak('Hello. I am Smriti. How can I help you today?')">
+    🎙️ Talk to Smriti
+   </button>
+  </div>
+  <div style="font-size:75px">🧠</div>
+ </div>
+
+ <div class="grid">
+  <div class="card">
+   <div class="label">Memory Support</div>
+   <div class="metric" id="memoryMetric">82%</div>
+   <div class="progress"><i id="memoryBar" style="width:82%"></i></div>
+  </div>
+  <div class="card">
+   <div class="label">Attention</div>
+   <div class="metric" id="attentionMetric">76%</div>
+   <div class="progress"><i id="attentionBar" style="width:76%"></i></div>
+  </div>
+  <div class="card">
+   <div class="label">Recognition</div>
+   <div class="metric" id="recognitionMetric">88%</div>
+   <div class="progress"><i id="recognitionBar" style="width:88%"></i></div>
+  </div>
+  <div class="card">
+   <div class="label">Sessions Completed</div>
+   <div class="metric" id="sessionMetric">7</div>
+   <div class="label">This month</div>
+  </div>
+ </div>
+
+ <div class="section-title">Quick Actions</div>
+ <div class="actions">
+  <button class="card action" onclick="showPage('games')">
+   <strong>🧩 Cognitive Exercise</strong>
+   <small>Try today's memory challenge</small>
+  </button>
+  <button class="card action" onclick="showPage('memories')">
+   <strong>💭 Memory Lane</strong>
+   <small>Review important personal memories</small>
+  </button>
+  <button class="card action" onclick="showPage('day')">
+   <strong>📅 My Day</strong>
+   <small>View and complete today's routine</small>
+  </button>
+ </div>
+
+ <div class="notice">
+  <b>Safety:</b> SmritiAI is an academic prototype for cognitive support.
+  It does not diagnose dementia, determine disease stage, prescribe treatment,
+  or replace professional clinical care.
+ </div>
+</section>
+
+<!-- BASELINE -->
+<section id="baseline" class="page">
+ <div class="form">
+  <h2>Baseline Assessment</h2>
+  <p class="sub">
+   A short activity used to establish an individual performance baseline.
+   This is not a medical diagnostic test.
+  </p>
+  <div id="baselineBox"></div>
+ </div>
+</section>
+
+
+<!-- GAMES -->
+<section id="games" class="page">
+
+ <div class="hero">
+  <div>
+   <h2>🧠 Adaptive Cognitive Studio</h2>
+   <p>
+    SmritiAI provides multiple cognitive-support activities.
+    Difficulty adapts using recent task performance.
+   </p>
+   <div class="live"><span class="dot"></span> Adaptive Engine Active</div>
+  </div>
+  <div style="font-size:70px">🧠</div>
+ </div>
+
+ <div class="grid">
+  <div class="card">
+   <div class="label">Current Level</div>
+   <div class="metric" id="cognitiveLevel">1</div>
+   <div class="label">Adaptive difficulty</div>
+  </div>
+
+  <div class="card">
+   <div class="label">Accuracy</div>
+   <div class="metric" id="cognitiveAccuracy">0%</div>
+   <div class="label">Recent activities</div>
+  </div>
+
+  <div class="card">
+   <div class="label">Games Played</div>
+   <div class="metric" id="gamesPlayed">0</div>
+   <div class="label">This device</div>
+  </div>
+
+  <div class="card">
+   <div class="label">Streak</div>
+   <div class="metric" id="cognitiveStreak">0</div>
+   <div class="label">Correct responses</div>
+  </div>
+ </div>
+
+ <div class="section-title">Choose an Activity</div>
+
+ <div class="actions">
+
+  <button class="card action" onclick="launchCognitiveGame('patternMatch')">
+   <strong>🧩 Pattern Match</strong>
+   <small>Identify matching visual patterns</small>
+  </button>
+
+  <button class="card action" onclick="launchCognitiveGame('memoryMatch')">
+   <strong>🧠 Memory Match</strong>
+   <small>Remember and match pairs</small>
+  </button>
+
+  <button class="card action" onclick="launchCognitiveGame('findObject')">
+   <strong>🔎 Find the Object</strong>
+   <small>Find the requested item among distractors</small>
+  </button>
+
+  <button class="card action" onclick="launchCognitiveGame('sequence')">
+   <strong>🔢 Pattern Sequence</strong>
+   <small>Complete the missing sequence element</small>
+  </button>
+
+  <button class="card action" onclick="launchCognitiveGame('album')">
+   <strong>🖼️ Memory Album</strong>
+   <small>Remember a collection of objects</small>
+  </button>
+
+  <button class="card action" onclick="launchCognitiveGame('puzzle')">
+   <strong>🧱 Puzzle</strong>
+   <small>Arrange pieces in the correct order</small>
+  </button>
+
+  <button class="card action" onclick="launchCognitiveGame('oddOne')">
+   <strong>🎯 Odd One Out</strong>
+   <small>Find the item that doesn't belong</small>
+  </button>
+
+  <button class="card action" onclick="launchCognitiveGame('quickRecall')">
+   <strong>⚡ Quick Recall</strong>
+   <small>Recall information after a short delay</small>
+  </button>
+
+  <button class="card action" onclick="launchCognitiveGame('wordMemory')">
+   <strong>🔤 Word Memory</strong>
+   <small>Remember and recognize words</small>
+  </button>
+
+  <button class="card action" onclick="launchCognitiveGame('numberMemory')">
+   <strong>🔢 Number Memory</strong>
+   <small>Remember increasingly longer numbers</small>
+  </button>
+
+ </div>
+
+ <div class="form" style="margin-top:25px">
+  <div class="row">
+   <h2 style="margin:0">Current Activity</h2>
+   <button class="secondary" onclick="showGameMenu()">← Game Menu</button>
+  </div>
+
+  <div id="adaptiveGameBox" style="margin-top:20px">
+   <div class="notice">
+    Select a cognitive activity above to begin.
+    SmritiAI will adjust difficulty based on recent performance.
+   </div>
+  </div>
+ </div>
+
+</section>
+
+<!-- MEMORIES -->
+<section id="memories" class="page">
+ <div class="form">
+  <h2>💭 Memory Lane</h2>
+  <p class="sub">Store helpful personal reminders locally on this device.</p>
+  <div class="row">
+   <input id="memoryInput" placeholder="Example: Priya's birthday is 15 October" style="flex:1">
+   <button class="primary" onclick="addMemory()">＋ Add Memory</button>
+  </div>
+ </div>
+ <div class="card" id="memoryList"></div>
+</section>
+
+<!-- MY DAY -->
+<section id="day" class="page">
+ <div class="form">
+  <h2>📅 My Day</h2>
+  <p class="sub">A simple routine support system.</p>
+  <div id="routineList"></div>
+  <div style="margin-top:18px">
+   <button class="secondary" onclick="resetRoutine()">Reset Routine</button>
+  </div>
+ </div>
+</section>
+
+<!-- ASSISTANT -->
+<section id="assistant" class="page">
+ <div class="form">
+  <h2>🎙️ Smriti Assistant</h2>
+  <p class="sub">
+   Type a command or use your microphone. Voice support depends on browser permissions.
+  </p>
+
+  <div class="chat" id="chat">
+   <div class="msg ai">
+    Hello! I'm Smriti. You can ask me about your memories, today's routine,
+    cognitive exercises, or say "open memories".
+   </div>
+  </div>
+
+  <div class="chatbar">
+   <input id="chatInput" placeholder="Ask Smriti something...">
+   <button class="voice" onclick="startVoice()">🎙️</button>
+   <button class="primary" onclick="sendChat()">Send</button>
+  </div>
+ </div>
+</section>
+
+<!-- CAREGIVER -->
+<section id="caregiver" class="page">
+ <div class="grid">
+  <div class="card"><div class="label">Sessions</div><div class="metric" id="careSessions">7</div></div>
+  <div class="card"><div class="label">Routine Completion</div><div class="metric" id="routineMetric">0%</div></div>
+  <div class="card"><div class="label">Memory Items</div><div class="metric" id="memoryMetric2">0</div></div>
+  <div class="card"><div class="label">Status</div><div class="metric" style="font-size:22px">Active</div></div>
+ </div>
+
+ <div class="form">
+  <h2>Recent Sessions</h2>
+  <table>
+   <thead><tr><th>Activity</th><th>Result</th><th>Status</th></tr></thead>
+   <tbody id="sessionTable">
+    <tr><td>Memory Sequence</td><td>8 / 10</td><td><span class="badge">Completed</span></td></tr>
+    <tr><td>Routine Recall</td><td>Completed</td><td><span class="badge">Completed</span></td></tr>
+    <tr><td>Recognition</td><td>88%</td><td><span class="badge">Completed</span></td></tr>
+   </tbody>
+  </table>
+ </div>
+
+ <div class="notice">
+  <b>AI-generated support summary:</b>
+  Recent activities show engagement with cognitive exercises and routine
+  support. This summary is for assistance and should not be interpreted
+  as a clinical assessment.
+ </div>
+</section>
+
+<!-- RESPONSIBLE AI -->
+<section id="responsible" class="page">
+ <div class="form">
+  <h2>🛡️ Responsible AI</h2>
+
+  <div class="notice">
+   <b>Purpose:</b> SmritiAI is an academic prototype for cognitive support,
+   memory assistance, routine support and cognitive stimulation.
+  </div>
+
+  <h3>What SmritiAI does</h3>
+  <ul>
+   <li>Provides memory assistance and reminders</li>
+   <li>Provides cognitive stimulation activities</li>
+   <li>Tracks user activity and task performance</li>
+   <li>Provides caregiver-oriented summaries</li>
+   <li>Supports routine recall</li>
+  </ul>
+
+  <h3>What SmritiAI does NOT do</h3>
+  <ul>
+   <li>Does not diagnose dementia</li>
+   <li>Does not assign dementia stages</li>
+   <li>Does not prescribe treatment</li>
+   <li>Does not replace clinical rehabilitation</li>
+   <li>Does not claim CDSCO clearance</li>
+  </ul>
+
+  <h3>Educational dementia-stage context</h3>
+  <div class="grid">
+   <div class="card"><b>Early / Mild</b><p class="sub">Increasing forgetfulness and difficulty with complex tasks while retaining relatively greater independence.</p></div>
+   <div class="card"><b>Moderate / Middle</b><p class="sub">Greater difficulties with memory, communication and orientation, with increased need for assistance.</p></div>
+   <div class="card"><b>Severe / Late</b><p class="sub">Major dependence and substantial impairment affecting communication and daily activities.</p></div>
+  </div>
+
+  <div class="notice">
+   These descriptions are educational only. SmritiAI does not determine
+   which stage a person is in. Clinical validation, professional oversight
+   and applicable regulatory assessment are required before clinical deployment.
+  </div>
+ </div>
+</section>
+
+</main>
+
+<script>
+const defaultMemories=[
+ {text:"Priya is an important family member.",date:"Today"},
+ {text:"Home city: Nagpur.",date:"Today"},
+ {text:"Favorite food: Poha.",date:"Today"},
+ {text:"Remember to call family.",date:"Today"}
+];
+
+const defaultRoutine=[
+ {text:"Morning medication reminder",done:false},
+ {text:"Drink water",done:false},
+ {text:"10-minute cognitive exercise",done:false},
+ {text:"Review today's memories",done:false},
+ {text:"Evening family call",done:false}
+];
+
+let memories=JSON.parse(localStorage.getItem("smriti_memories")||"null")||defaultMemories;
+let routine=JSON.parse(localStorage.getItem("smriti_routine")||"null")||defaultRoutine;
+let sessions=Number(localStorage.getItem("smriti_sessions")||7);
+
+const pages={
+ home:"Good day 👋",
+ baseline:"Baseline Assessment",
+ games:"Cognitive Games",
+ memories:"Memory Lane",
+ day:"My Day",
+ assistant:"Smriti Assistant",
+ caregiver:"Caregiver Dashboard",
+ responsible:"Responsible AI"
+};
+
+function showPage(id){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.getElementById("pageTitle").textContent=pages[id];
+
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+ const btn=[...document.querySelectorAll(".nav button")].find(b=>b.getAttribute("onclick")===`showPage('${id}')`);
+ if(btn)btn.classList.add("active");
+
+ if(id==="baseline")renderBaseline();
+ if(id==="games")updateCognitiveDashboard();
+ if(id==="memories")renderMemories();
+ if(id==="day")renderRoutine();
+ if(id==="caregiver")renderCaregiver();
+}
+
+function save(){
+ localStorage.setItem("smriti_memories",JSON.stringify(memories));
+ localStorage.setItem("smriti_routine",JSON.stringify(routine));
+ localStorage.setItem("smriti_sessions",sessions);
+}
+
+function addMemory(){
+ const input=document.getElementById("memoryInput");
+ const text=input.value.trim();
+ if(!text)return;
+ memories.unshift({text,date:new Date().toLocaleDateString()});
+ input.value="";
+ save();
+ renderMemories();
+ updateMetrics();
+ speak("Memory saved.");
+}
+
+function deleteMemory(i){
+ memories.splice(i,1);
+ save();
+ renderMemories();
+ updateMetrics();
+}
+
+function renderMemories(){
+ const box=document.getElementById("memoryList");
+ if(!memories.length){
+  box.innerHTML="<p class='sub'>No memories saved yet.</p>";
+  return;
+ }
+ box.innerHTML=memories.map((m,i)=>`
+  <div class="memory">
+   <div>
+    <div class="memory-title">💭 ${escapeHtml(m.text)}</div>
+    <div class="memory-meta">${m.date}</div>
+   </div>
+   <button class="secondary" onclick="deleteMemory(${i})">Delete</button>
+  </div>
+ `).join("");
+}
+
+function renderRoutine(){
+ const box=document.getElementById("routineList");
+ box.innerHTML=routine.map((r,i)=>`
+  <div class="routine">
+   <input type="checkbox" ${r.done?"checked":""} onchange="toggleRoutine(${i},this.checked)">
+   <span class="${r.done?"done":""}">${escapeHtml(r.text)}</span>
+  </div>
+ `).join("");
+ updateMetrics();
+}
+
+function toggleRoutine(i,value){
+ routine[i].done=value;
+ save();
+ renderRoutine();
+}
+
+function resetRoutine(){
+ routine.forEach(r=>r.done=false);
+ save();
+ renderRoutine();
+}
+
+function updateMetrics(){
+ const completed=routine.filter(r=>r.done).length;
+ const pct=Math.round(completed/routine.length*100);
+
+ document.getElementById("routineMetric").textContent=pct+"%";
+ document.getElementById("memoryMetric2").textContent=memories.length;
+ document.getElementById("sessionMetric").textContent=sessions;
+ document.getElementById("careSessions").textContent=sessions;
+}
+
+const baselineQuestions=[
+ {q:"Which number comes next? 2, 4, 6, ?",opts:["7","8","9","10"],a:"8"},
+ {q:"Which word is different?",opts:["Apple","Mango","Chair","Banana"],a:"Chair"},
+ {q:"If today is Monday, what is tomorrow?",opts:["Sunday","Tuesday","Friday","Saturday"],a:"Tuesday"},
+ {q:"Which item is usually used to tell time?",opts:["Clock","Plate","Spoon","Book"],a:"Clock"},
+ {q:"Remember this: BLUE. Which word did you just see?",opts:["Green","Blue","Red","Yellow"],a:"Blue"}
+];
+
+let baselineIndex=0;
+let baselineScore=0;
+
+function renderBaseline(){
+ baselineIndex=0;
+ baselineScore=0;
+ showBaselineQuestion();
+}
+
+function showBaselineQuestion(){
+ const box=document.getElementById("baselineBox");
+
+ if(baselineIndex>=baselineQuestions.length){
+  const score=Math.round(baselineScore/baselineQuestions.length*100);
+  box.innerHTML=`
+   <div class="bigscore">${score}%</div>
+   <h3>Baseline completed</h3>
+   <p class="sub">
+    This establishes a prototype performance baseline based on this activity.
+    It is not a dementia score or diagnosis.
+   </p>
+   <button class="primary" onclick="showPage('games')">Continue to Cognitive Exercise →</button>
+  `;
+  if(score>=80){
+   document.getElementById("memoryMetric").textContent=score+"%";
+   document.getElementById("memoryBar").style.width=score+"%";
+  }
+  return;
+ }
+
+ const x=baselineQuestions[baselineIndex];
+
+ box.innerHTML=`
+  <div class="question">${baselineIndex+1}. ${x.q}</div>
+  ${x.opts.map(o=>`<button class="option" onclick="answerBaseline('${escapeAttr(o)}')">${escapeHtml(o)}</button>`).join("")}
+ `;
+}
+
+function answerBaseline(answer){
+ if(answer===baselineQuestions[baselineIndex].a)baselineScore++;
+ baselineIndex++;
+ showBaselineQuestion();
+}
+
+let sequence=[];
+let selected=[];
+let gameActive=false;
+
+function startGame(){
+ sequence=[];
+ selected=[];
+ gameActive=false;
+
+ const colors=["🔵","🟢","🟡","🔴","🟣","🟠"];
+ for(let i=0;i<4;i++)sequence.push(colors[Math.floor(Math.random()*colors.length)]);
+
+ const box=document.getElementById("gameBox");
+
+ box.innerHTML=`
+  <div style="font-size:40px;margin:25px 0" id="sequenceDisplay">••••</div>
+  <p id="gameInstruction" class="sub">Press Start and remember the sequence.</p>
+  <button class="primary" onclick="beginGame()">Start Challenge</button>
+  <div id="sequenceOptions" style="margin-top:20px"></div>
+ `;
+}
+
+function beginGame(){
+ selected=[];
+ gameActive=true;
+ const display=document.getElementById("sequenceDisplay");
+ const instruction=document.getElementById("gameInstruction");
+ display.textContent=sequence.join(" ");
+ instruction.textContent="Remember this sequence...";
+
+ setTimeout(()=>{
+  display.textContent="❓ ❓ ❓ ❓";
+  instruction.textContent="Select the symbols in the original order.";
+  renderOptions();
+ },2200);
+}
+
+function renderOptions(){
+ const options=["🔵","🟢","🟡","🔴","🟣","🟠"];
+ document.getElementById("sequenceOptions").innerHTML=
+  options.map(o=>`<button class="option" style="display:inline-block;width:auto;margin-right:8px;font-size:24px" onclick="selectSymbol('${o}')">${o}</button>`).join("");
+}
+
+function selectSymbol(s){
+ if(!gameActive)return;
+ selected.push(s);
+
+ const n=selected.length;
+ document.getElementById("sequenceDisplay").textContent=selected.join(" ");
+
+ if(selected[n-1]!==sequence[n-1]){
+  finishGame(false);
+  return;
+ }
+
+ if(selected.length===sequence.length)finishGame(true);
+}
+
+function finishGame(win){
+ gameActive=false;
+ sessions++;
+ save();
+
+ const box=document.getElementById("gameInstruction");
+
+ if(win){
+  box.innerHTML=`<div class="result">🎉 Excellent! You remembered all 4 symbols correctly.</div>`;
+  speak("Excellent. You completed the memory challenge.");
+ }else{
+  box.innerHTML=`<div class="result">Good attempt. The correct sequence was ${sequence.join(" ")}.</div>`;
+ }
+
+ document.getElementById("sequenceOptions").innerHTML=
+  `<button class="primary" onclick="startGame()">Try Again</button>`;
+
+ updateMetrics();
+}
+
+function sendChat(){
+ const input=document.getElementById("chatInput");
+ const text=input.value.trim();
+ if(!text)return;
+
+ addMessage(text,"user");
+ input.value="";
+
+ setTimeout(()=>respond(text),250);
+}
+
+function addMessage(text,type){
+ const chat=document.getElementById("chat");
+ const div=document.createElement("div");
+ div.className="msg "+type;
+ div.textContent=text;
+ chat.appendChild(div);
+ chat.scrollTop=chat.scrollHeight;
+}
+
+function respond(text){
+ const t=text.toLowerCase();
+ let reply="I can help with memories, routines, cognitive exercises and navigation.";
+
+ if(t.includes("memory")||t.includes("remember")){
+  if(memories.length){
+   reply="You currently have "+memories.length+" saved memories. The latest is: "+memories[0].text;
+  }else reply="You don't have any saved memories yet.";
+ }
+
+ if(t.includes("routine")||t.includes("today")||t.includes("day")){
+  const left=routine.filter(r=>!r.done).length;
+  reply="You have "+left+" routine items remaining today.";
+ }
+
+ if(t.includes("exercise")||t.includes("game")){
+  reply="Opening the cognitive memory challenge for you.";
+  setTimeout(()=>showPage("games"),500);
+ }
+
+ if(t.includes("caregiver")){
+  reply="Opening the caregiver dashboard.";
+  setTimeout(()=>showPage("caregiver"),500);
+ }
+
+ if(t.includes("open memories")){
+  reply="Opening Memory Lane.";
+  setTimeout(()=>showPage("memories"),500);
+ }
+
+ if(t.includes("hello")||t.includes("hi")){
+  reply="Hello! I'm Smriti. I can help you remember important information, review your routine, and practice cognitive exercises.";
+ }
+
+ addMessage(reply,"ai");
+ speak(reply);
+}
+
+function startVoice(){
+ if(!("webkitSpeechRecognition" in window||"SpeechRecognition" in window)){
+  addMessage("Voice recognition is not supported in this browser. Try Chrome.","ai");
+  return;
+ }
+
+ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ const recognition=new SpeechRecognition();
+
+ recognition.lang="en-IN";
+ recognition.interimResults=false;
+ recognition.maxAlternatives=1;
+
+ addMessage("Listening...","ai");
+
+ recognition.onresult=e=>{
+  const text=e.results[0][0].transcript;
+  document.getElementById("chatInput").value=text;
+  sendChat();
+ };
+
+ recognition.onerror=()=>{
+  addMessage("I couldn't hear that. Please try again.","ai");
+ };
+
+ recognition.start();
+}
+
+function speak(text){
+ if("speechSynthesis" in window){
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=.95;
+  u.pitch=1;
+  speechSynthesis.speak(u);
+ }
+}
+
+
+/* =========================================================
+   SMRITIAI ADAPTIVE COGNITIVE ENGINE
+   ========================================================= */
+
+let cognitiveState = JSON.parse(
+ localStorage.getItem("smriti_cognitive_state") || "null"
+) || {
+ level:1,
+ played:0,
+ correct:0,
+ attempts:0,
+ streak:0,
+ history:[]
+};
+
+let currentGame = null;
+let gameStartTime = 0;
+let gameTimer = null;
+let gameData = {};
+
+function saveCognitive(){
+ localStorage.setItem(
+  "smriti_cognitive_state",
+  JSON.stringify(cognitiveState)
+ );
+ updateCognitiveDashboard();
+}
+
+function updateCognitiveDashboard(){
+
+ const accuracy = cognitiveState.attempts
+   ? Math.round((cognitiveState.correct / cognitiveState.attempts) * 100)
+   : 0;
+
+ const level = Math.max(1,Math.min(5,cognitiveState.level));
+
+ const a=document.getElementById("cognitiveAccuracy");
+ const l=document.getElementById("cognitiveLevel");
+ const p=document.getElementById("gamesPlayed");
+ const st=document.getElementById("cognitiveStreak");
+
+ if(a)a.textContent=accuracy+"%";
+ if(l)l.textContent=level;
+ if(p)p.textContent=cognitiveState.played;
+ if(st)st.textContent=cognitiveState.streak;
+}
+
+function recordCognitiveResult(correct,gameName,timeMs){
+
+ cognitiveState.attempts++;
+
+ if(correct){
+  cognitiveState.correct++;
+  cognitiveState.streak++;
+ }else{
+  cognitiveState.streak=0;
+ }
+
+ /*
+  Adaptive logic:
+  strong recent performance → increase difficulty
+  repeated errors → reduce difficulty
+  This is a gameplay adaptation mechanism,
+  not a clinical assessment.
+ */
+
+ if(correct && cognitiveState.streak>=3){
+  cognitiveState.level=Math.min(5,cognitiveState.level+1);
+  cognitiveState.streak=0;
+ }
+
+ if(!correct){
+  cognitiveState.level=Math.max(1,cognitiveState.level-1);
+ }
+
+ cognitiveState.history.unshift({
+  game:gameName,
+  correct:correct,
+  time:timeMs,
+  level:cognitiveState.level,
+  date:new Date().toISOString()
+ });
+
+ cognitiveState.history=cognitiveState.history.slice(0,50);
+
+ saveCognitive();
+
+ logActivity(
+  gameName,
+  correct ? "Completed successfully" : "Needs another attempt"
+ );
+}
+
+function showGameMenu(){
+ const box=document.getElementById("adaptiveGameBox");
+
+ box.innerHTML=`
+  <div class="notice">
+   Select one of the cognitive activities above.
+   Difficulty is currently <b>Level ${cognitiveState.level}</b>.
+  </div>
+ `;
+
+ window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
+}
+
+function launchCognitiveGame(type){
+
+ currentGame=type;
+ gameStartTime=Date.now();
+
+ const box=document.getElementById("adaptiveGameBox");
+
+ box.innerHTML=`
+  <div class="card">
+   <div class="label">Adaptive Level</div>
+   <div class="bigscore">Level ${cognitiveState.level}</div>
+   <div class="sub">
+    Activity difficulty adapts according to recent gameplay performance.
+   </div>
+  </div>
+  <div id="activeGame" style="margin-top:20px"></div>
+ `;
+
+ const active=document.getElementById("activeGame");
+
+ if(type==="patternMatch")gamePatternMatch(active);
+ if(type==="memoryMatch")gameMemoryMatch(active);
+ if(type==="findObject")gameFindObject(active);
+ if(type==="sequence")gameSequence(active);
+ if(type==="album")gameAlbum(active);
+ if(type==="puzzle")gamePuzzle(active);
+ if(type==="oddOne")gameOddOne(active);
+ if(type==="quickRecall")gameQuickRecall(active);
+ if(type==="wordMemory")gameWordMemory(active);
+ if(type==="numberMemory")gameNumberMemory(active);
+}
+
+/* ---------------------------------------------------------
+   PATTERN MATCH
+   --------------------------------------------------------- */
+
+function gamePatternMatch(box){
+
+ const symbols=["🔵","🟢","🟡","🔴","🟣","🟠"];
+ const count=Math.min(3+cognitiveState.level,6);
+
+ let pattern=[];
+
+ for(let i=0;i<count;i++){
+  pattern.push(symbols[Math.floor(Math.random()*symbols.length)]);
+ }
+
+ let target=pattern[Math.floor(Math.random()*pattern.length)];
+
+ let options=[target];
+
+ while(options.length<4){
+  let x=symbols[Math.floor(Math.random()*symbols.length)];
+  if(!options.includes(x))options.push(x);
+ }
+
+ options.sort(()=>Math.random()-.5);
+
+ box.innerHTML=`
+  <h2>🧩 Pattern Match</h2>
+  <p class="sub">Which symbol appeared in the pattern?</p>
+
+  <div style="font-size:42px;letter-spacing:10px;margin:25px 0">
+   ${pattern.join(" ")}
+  </div>
+
+  <div>
+   ${options.map(x=>`
+    <button class="option"
+      style="display:inline-block;width:auto;font-size:28px"
+      onclick="finishSimpleGame('Pattern Match','${x}','${target}',this)">
+      ${x}
+    </button>
+   `).join("")}
+  </div>
+ `;
+}
+
+/* ---------------------------------------------------------
+   MEMORY MATCH
+   --------------------------------------------------------- */
+
+function gameMemoryMatch(box){
+
+ const symbols=["🍎","⭐","🚗","🏠","🌳","🎈"];
+
+ const pairs=Math.min(2+Math.floor(cognitiveState.level/2),4);
+
+ let cards=symbols.slice(0,pairs);
+ cards=[...cards,...cards].sort(()=>Math.random()-.5);
+
+ box.innerHTML=`
+  <h2>🧠 Memory Match</h2>
+  <p class="sub">Find all matching pairs.</p>
+  <div id="memoryGrid"
+       style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:500px">
+   ${cards.map((x,i)=>`
+    <button class="option"
+      id="mc${i}"
+      style="height:75px;font-size:30px"
+      onclick="flipMemoryCard(${i},'${x}')">❓</button>
+   `).join("")}
+  </div>
+
+  <div id="memoryMatchStatus" class="result">
+   Matches: 0 / ${pairs}
+  </div>
+ `;
+
+ gameData={
+  cards:cards,
+  flipped:[],
+  matched:[],
+  pairs:pairs
+ };
+}
+
+function flipMemoryCard(i,value){
+
+ if(gameData.matched.includes(i))return;
+ if(gameData.flipped.some(x=>x.i===i))return;
+ if(gameData.flipped.length>=2)return;
+
+ const btn=document.getElementById("mc"+i);
+ btn.textContent=value;
+ gameData.flipped.push({i:i,value:value});
+
+ if(gameData.flipped.length===2){
+
+  const a=gameData.flipped[0];
+  const b=gameData.flipped[1];
+
+  if(a.value===b.value){
+
+   gameData.matched.push(a.i,b.i);
+
+   document.getElementById("memoryMatchStatus").textContent=
+    "Matches: "+(gameData.matched.length/2)+" / "+gameData.pairs;
+
+   gameData.flipped=[];
+
+   if(gameData.matched.length===gameData.cards.length){
+    finishCognitive(true,"Memory Match");
+   }
+
+  }else{
+
+   setTimeout(()=>{
+    document.getElementById("mc"+a.i).textContent="❓";
+    document.getElementById("mc"+b.i).textContent="❓";
+    gameData.flipped=[];
+   },650);
+  }
+ }
+}
+
+/* ---------------------------------------------------------
+   FIND OBJECT
+   --------------------------------------------------------- */
+
+function gameFindObject(box){
+
+ const objects=["🍎","🚗","🏠","🌳","⭐","🎈","📚","☕","🐶","⚽"];
+
+ const count=Math.min(6+cognitiveState.level*2,10);
+
+ let selected=objects.slice(0,count);
+ let target=selected[Math.floor(Math.random()*selected.length)];
+
+ box.innerHTML=`
+  <h2>🔎 Find the Object</h2>
+  <p class="sub">Find: <b style="font-size:25px">${target}</b></p>
+
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+   ${selected.map(x=>`
+    <button class="option"
+      style="font-size:30px"
+      onclick="finishSimpleGame('Find the Object','${x}','${target}',this)">
+      ${x}
+    </button>
+   `).join("")}
+  </div>
+ `;
+}
+
+/* ---------------------------------------------------------
+   PATTERN SEQUENCE
+   --------------------------------------------------------- */
+
+function gameSequence(box){
+
+ const level=cognitiveState.level;
+
+ const start=Math.floor(Math.random()*5)+1;
+ const step=Math.floor(Math.random()*3)+1;
+
+ let numbers=[];
+
+ for(let i=0;i<4+level;i++){
+  numbers.push(start+(i*step));
+ }
+
+ const answer=numbers[numbers.length-1];
+ numbers[numbers.length-1]="?";
+
+ let options=[
+  answer,
+  answer+step,
+  answer-step,
+  answer+1
+ ];
+
+ options=[...new Set(options)].slice(0,4);
+
+ box.innerHTML=`
+  <h2>🔢 Pattern Sequence</h2>
+  <p class="sub">Choose the number that completes the pattern.</p>
+
+  <div style="font-size:32px;margin:25px 0">
+   ${numbers.join(" → ")}
+  </div>
+
+  ${options.map(x=>`
+   <button class="option"
+    onclick="finishSimpleGame('Pattern Sequence','${x}','${answer}',this)">
+    ${x}
+   </button>
+  `).join("")}
+ `;
+}
+
+/* ---------------------------------------------------------
+   MEMORY ALBUM
+   --------------------------------------------------------- */
+
+function gameAlbum(box){
+
+ const objects=["🍎","🚗","🌳","🏠","⭐","🎈","☕","📚","🐶","⚽"];
+
+ const count=Math.min(3+cognitiveState.level,8);
+
+ const chosen=objects
+   .sort(()=>Math.random()-.5)
+   .slice(0,count);
+
+ gameData.album=chosen;
+
+ box.innerHTML=`
+  <h2>🖼️ Memory Album</h2>
+
+  <p class="sub">
+   Remember these objects. They will disappear shortly.
+  </p>
+
+  <div id="albumDisplay"
+       style="font-size:42px;letter-spacing:10px;margin:30px 0">
+   ${chosen.join(" ")}
+  </div>
+ `;
+
+ setTimeout(()=>{
+
+  const options=[...chosen];
+
+  const wrong=objects
+   .filter(x=>!chosen.includes(x))
+   .sort(()=>Math.random()-.5)
+   .slice(0,Math.min(3,cognitiveState.level));
+
+  options.push(...wrong);
+  options.sort(()=>Math.random()-.5);
+
+  box.innerHTML=`
+   <h2>🖼️ Memory Album</h2>
+   <p class="sub">Which object was in the album?</p>
+
+   ${options.map(x=>`
+    <button class="option"
+     style="display:inline-block;width:auto;font-size:30px"
+     onclick="finishSimpleGame('Memory Album','${x}','${chosen[0]}',this,true)">
+     ${x}
+    </button>
+   `).join("")}
+  `;
+
+ },2200);
+}
+
+/* ---------------------------------------------------------
+   PUZZLE
+   --------------------------------------------------------- */
+
+function gamePuzzle(box){
+
+ const level=cognitiveState.level;
+
+ const correct=["1","2","3","4","5","6"];
+
+ let shuffled=[...correct].sort(()=>Math.random()-.5);
+
+ box.innerHTML=`
+  <h2>🧱 Puzzle</h2>
+  <p class="sub">Arrange the numbers from smallest to largest.</p>
+
+  <div id="puzzlePieces"
+       style="display:flex;gap:10px;flex-wrap:wrap;margin:20px 0">
+   ${shuffled.map(x=>`
+    <button class="option puzzlePiece"
+     style="width:60px;text-align:center;font-size:22px"
+     onclick="selectPuzzlePiece('${x}',this)">
+     ${x}
+    </button>
+   `).join("")}
+  </div>
+
+  <div class="result">
+   Selected:
+   <span id="puzzleAnswer">—</span>
+  </div>
+
+  <button class="primary" style="margin-top:15px"
+   onclick="checkPuzzle()">Check Puzzle</button>
+ `;
+
+ gameData.puzzle=[];
+}
+
+function selectPuzzlePiece(value,button){
+
+ if(gameData.puzzle.includes(value))return;
+
+ gameData.puzzle.push(value);
+ button.style.opacity=".35";
+
+ document.getElementById("puzzleAnswer").textContent=
+  gameData.puzzle.join(" → ");
+}
+
+function checkPuzzle(){
+
+ const answer=gameData.puzzle.join("");
+ const correct="123456";
+
+ finishCognitive(answer===correct,"Puzzle");
+}
+
+/* ---------------------------------------------------------
+   ODD ONE OUT
+   --------------------------------------------------------- */
+
+function gameOddOne(box){
+
+ const groups=[
+  ["🍎","🍌","🍊","🚗"],
+  ["🚗","🚌","🚲","🍎"],
+  ["🐶","🐱","🐭","🏠"],
+  ["⭐","🌙","☀️","🚗"],
+  ["📕","📗","📘","🍎"]
+ ];
+
+ const group=groups[Math.floor(Math.random()*groups.length)];
+
+ let odd;
+
+ if(group[0]==="🍎")odd="🚗";
+ else if(group[0]==="🚗")odd="🍎";
+ else if(group[0]==="🐶")odd="🏠";
+ else if(group[0]==="⭐")odd="🚗";
+ else odd="🍎";
+
+ box.innerHTML=`
+  <h2>🎯 Odd One Out</h2>
+  <p class="sub">Which object is different from the others?</p>
+
+  ${group.map(x=>`
+   <button class="option"
+    style="display:inline-block;width:auto;font-size:34px"
+    onclick="finishSimpleGame('Odd One Out','${x}','${odd}',this)">
+    ${x}
+   </button>
+  `).join("")}
+ `;
+}
+
+/* ---------------------------------------------------------
+   QUICK RECALL
+   --------------------------------------------------------- */
+
+function gameQuickRecall(box){
+
+ const words=["river","orange","school","garden","train","moon"];
+
+ const count=Math.min(2+cognitiveState.level,6);
+ const chosen=words.sort(()=>Math.random()-.5).slice(0,count);
+
+ gameData.quick=chosen;
+
+ box.innerHTML=`
+  <h2>⚡ Quick Recall</h2>
+  <p class="sub">Remember these words.</p>
+
+  <div style="font-size:24px;line-height:2;margin:25px 0">
+   ${chosen.join(" • ")}
+  </div>
+ `;
+
+ setTimeout(()=>{
+
+  const target=chosen[Math.floor(Math.random()*chosen.length)];
+
+  box.innerHTML=`
+   <h2>⚡ Quick Recall</h2>
+   <p class="sub">Which word did you see?</p>
+
+   ${words.map(x=>`
+    <button class="option"
+     onclick="finishSimpleGame('Quick Recall','${x}','${target}',this)">
+     ${x}
+    </button>
+   `).join("")}
+  `;
+
+ },2000);
+}
+
+/* ---------------------------------------------------------
+   WORD MEMORY
+   --------------------------------------------------------- */
+
+function gameWordMemory(box){
+
+ const words=[
+  "family","river","garden","school",
+  "doctor","orange","window","morning"
+ ];
+
+ const count=Math.min(3+cognitiveState.level,7);
+
+ const chosen=words.sort(()=>Math.random()-.5).slice(0,count);
+
+ const target=chosen[Math.floor(Math.random()*chosen.length)];
+
+ box.innerHTML=`
+  <h2>🔤 Word Memory</h2>
+  <p class="sub">Remember these words.</p>
+
+  <div style="font-size:22px;line-height:2;margin:25px 0">
+   ${chosen.join(" • ")}
+  </div>
+ `;
+
+ setTimeout(()=>{
+
+  const options=[target,...words.filter(x=>x!==target).slice(0,3)]
+   .sort(()=>Math.random()-.5);
+
+  box.innerHTML=`
+   <h2>🔤 Word Memory</h2>
+   <p class="sub">Which word appeared earlier?</p>
+
+   ${options.map(x=>`
+    <button class="option"
+     onclick="finishSimpleGame('Word Memory','${x}','${target}',this)">
+     ${x}
+    </button>
+   `).join("")}
+  `;
+
+ },2200);
+}
+
+/* ---------------------------------------------------------
+   NUMBER MEMORY
+   --------------------------------------------------------- */
+
+function gameNumberMemory(box){
+
+ const length=Math.min(3+cognitiveState.level,7);
+
+ let number="";
+
+ for(let i=0;i<length;i++){
+  number+=Math.floor(Math.random()*10);
+ }
+
+ gameData.number=number;
+
+ box.innerHTML=`
+  <h2>🔢 Number Memory</h2>
+  <p class="sub">Remember the number.</p>
+
+  <div style="font-size:42px;font-weight:800;margin:30px 0">
+   ${number}
+  </div>
+ `;
+
+ setTimeout(()=>{
+
+  box.innerHTML=`
+   <h2>🔢 Number Memory</h2>
+   <p class="sub">Enter the number you remember.</p>
+
+   <input id="numberAnswer"
+    style="font-size:25px;max-width:350px"
+    inputmode="numeric"
+    placeholder="Enter number">
+
+   <br>
+
+   <button class="primary"
+    onclick="checkNumberMemory()">
+    Check Answer
+   </button>
+  `;
+
+ },2500);
+}
+
+function checkNumberMemory(){
+
+ const answer=document.getElementById("numberAnswer").value.trim();
+
+ finishCognitive(answer===gameData.number,"Number Memory");
+}
+
+/* ---------------------------------------------------------
+   GENERIC GAME RESULT
+   --------------------------------------------------------- */
+
+function finishSimpleGame(gameName,answer,target,button,albumMode=false){
+
+ const correct=answer===target;
+
+ if(button){
+  button.classList.add(correct?"correct":"wrong");
+ }
+
+ finishCognitive(correct,gameName);
+}
+
+function finishCognitive(correct,gameName){
+
+ const elapsed=Date.now()-gameStartTime;
+
+ cognitiveState.played++;
+
+ recordCognitiveResult(correct,gameName,elapsed);
+
+ const box=document.getElementById("activeGame");
+
+ if(!box)return;
+
+ box.innerHTML=`
+  <div class="result">
+
+   <div style="font-size:45px">
+    ${correct?"🎉":"💡"}
+   </div>
+
+   <h2>
+    ${correct?"Excellent work!":"Good attempt!"}
+   </h2>
+
+   <p>
+    ${correct
+     ?"You completed the activity successfully."
+     :"This activity can be tried again."}
+   </p>
+
+   <p class="sub">
+    Response time: ${(elapsed/1000).toFixed(1)} seconds
+   </p>
+
+   <p class="sub">
+    Adaptive level is now <b>${cognitiveState.level}</b>.
+   </p>
+
+   <button class="primary"
+    onclick="launchCognitiveGame('${currentGame}')">
+    Play Again
+   </button>
+
+   <button class="secondary"
+    style="margin-left:8px"
+    onclick="showGameMenu()">
+    Game Menu
+   </button>
+
+  </div>
+ `;
+
+ speak(
+  correct
+   ?"Excellent work. You completed the activity."
+   :"Good attempt. You can try the activity again."
+ );
+}
+
+
+function escapeHtml(s){
+ return String(s).replace(/[&<>"']/g,m=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+ }[m]));
+}
+
+function escapeAttr(s){
+ return String(s).replace(/'/g,"\\\\'");
+}
+
+document.getElementById("chatInput").addEventListener("keydown",e=>{
+ if(e.key==="Enter")sendChat();
+});
+
+renderMemories();
+renderRoutine();
+updateMetrics();
+updateCognitiveDashboard();
+</script>
+
+</body>
+</html>

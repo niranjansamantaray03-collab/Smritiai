@@ -1,0 +1,3045 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SmritiAI</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#f6f9fc;color:#172033}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+.hidden{display:none!important}
+.app{min-height:100vh}
+.top{height:72px;background:#fff;border-bottom:1px solid #e6edf5;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20}
+.logo{font-size:23px;font-weight:800;color:#2563eb}.logo span{color:#10b981}
+.userbox{display:flex;align-items:center;gap:12px}
+.avatar{width:40px;height:40px;border-radius:50%;background:#dbeafe;color:#2563eb;display:grid;place-items:center;font-weight:700}
+.layout{display:flex;min-height:calc(100vh - 72px)}
+.side{width:245px;background:#fff;border-right:1px solid #e6edf5;padding:20px 14px}
+.nav{width:100%;text-align:left;padding:13px 15px;border-radius:12px;background:none;color:#566176;margin:4px 0;font-weight:600}
+.nav:hover,.nav.active{background:#eff6ff;color:#2563eb}
+.main{flex:1;padding:28px;max-width:1500px;margin:auto;width:100%}
+.card{background:#fff;border:1px solid #e5ebf2;border-radius:18px;padding:22px;box-shadow:0 5px 20px rgba(25,50,80,.04)}
+.grid{display:grid;gap:18px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+h1{font-size:30px;margin:0 0 8px}h2{font-size:21px;margin:0 0 12px}h3{margin:0 0 8px}
+.muted{color:#697586}.small{font-size:13px}
+.primary{background:#2563eb;color:#fff;padding:12px 18px;border-radius:11px;font-weight:700}
+.success{background:#10b981;color:#fff;padding:12px 18px;border-radius:11px;font-weight:700}
+.secondary{background:#eef4fb;color:#26364f;padding:12px 18px;border-radius:11px;font-weight:700}
+.danger{background:#fee2e2;color:#b91c1c;padding:10px 14px;border-radius:10px}
+.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.between{justify-content:space-between}
+.stat{font-size:30px;font-weight:800;margin-top:5px}
+.progress{height:9px;background:#e8eef5;border-radius:20px;overflow:hidden}.progress i{display:block;height:100%;background:#2563eb;border-radius:20px}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#eaf2ff;color:#2563eb;font-size:12px;font-weight:700}
+input,select,textarea{width:100%;padding:12px 13px;border:1px solid #d8e0ea;border-radius:11px;background:#fff;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#60a5fa;box-shadow:0 0 0 3px #dbeafe}
+label{display:block;font-size:13px;font-weight:700;margin:0 0 6px}.field{margin-bottom:14px}
+.auth{min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr;background:#f7fbff}
+.authleft{padding:70px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(135deg,#eff6ff,#ecfdf5)}
+.authleft h1{font-size:52px;max-width:600px}.authleft p{font-size:18px;line-height:1.7;max-width:600px;color:#526176}
+.authright{display:flex;align-items:center;justify-content:center;padding:30px}.authcard{width:min(460px,100%);background:#fff;border:1px solid #e5ebf2;border-radius:24px;padding:30px;box-shadow:0 15px 50px rgba(30,60,100,.1)}
+.tabs{display:flex;background:#f1f5f9;padding:4px;border-radius:12px;margin-bottom:20px}.tabs button{flex:1;padding:10px;border-radius:9px;background:none}.tabs button.active{background:#fff;box-shadow:0 2px 7px #dce4ee;font-weight:700}
+.role{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}.role button{padding:14px;border:1px solid #dce5ef;background:#fff;border-radius:12px}.role button.active{border:2px solid #2563eb;background:#eff6ff}
+.gamecard{min-height:190px;display:flex;align-items:center;justify-content:center;text-align:center}
+.game-grid{display:grid;grid-template-columns:repeat(4,80px);gap:10px;justify-content:center;margin:20px 0}
+.tile{width:80px;height:80px;border-radius:13px;background:#e9f1ff;display:grid;place-items:center;font-size:28px;font-weight:800;color:#2563eb}
+.tile.revealed{background:#dbeafe}.tile.matched{background:#d1fae5;color:#059669}
+.options{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:20px}
+.option{min-width:90px;padding:15px;border:2px solid #dbe4ee;border-radius:12px;background:#fff;font-size:20px}
+.option:hover{border-color:#2563eb}
+.objarea{height:280px;background:#f8fafc;border-radius:15px;position:relative;overflow:hidden;margin:18px 0;border:1px solid #e4eaf1}
+.object{position:absolute;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:#2563eb;color:#fff;font-size:25px;user-select:none}
+.story-photo{width:100%;height:210px;object-fit:cover;border-radius:14px;background:#f1f5f9}
+.album{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.album img{width:100%;height:150px;object-fit:cover;border-radius:12px}
+.voice{width:58px;height:58px;border-radius:50%;background:#2563eb;color:#fff;font-size:24px;box-shadow:0 7px 20px #bfdbfe}
+.voice.listening{background:#ef4444;animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+.toast{position:fixed;right:22px;bottom:22px;background:#172033;color:#fff;padding:14px 18px;border-radius:12px;z-index:100;box-shadow:0 10px 30px #0002}
+.modal{position:fixed;inset:0;background:#17203399;display:grid;place-items:center;z-index:80;padding:20px}.modalbox{width:min(700px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:20px;padding:24px}
+.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid #edf1f5}
+.empty{text-align:center;padding:40px;color:#718096}
+@media(max-width:900px){.auth{grid-template-columns:1fr}.authleft{display:none}.side{width:70px}.nav{font-size:0;text-align:center}.main{padding:18px}.g2,.g3,.g4{grid-template-columns:1fr}}
+/* SMRITI_CONNECTION_SYSTEM_V1 */
+
+.connection-fab {
+    position: fixed;
+    left: 22px;
+    bottom: 88px;
+    z-index: 9998;
+    border: 0;
+    border-radius: 18px;
+    padding: 13px 18px;
+    background: #ffffff;
+    color: #183153;
+    box-shadow: 0 10px 30px rgba(0,0,0,.14);
+    font-weight: 800;
+    cursor: pointer;
+    border: 1px solid #dce6f2;
+}
+
+.connection-fab:hover {
+    transform: translateY(-2px);
+}
+
+.connection-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(20,30,45,.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.connection-modal {
+    width: min(720px, 96vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 26px;
+    padding: 28px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.22);
+}
+
+.connection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 22px;
+}
+
+.connection-id-box {
+    background: #eef6ff;
+    border: 1px solid #cfe3fa;
+    border-radius: 18px;
+    padding: 18px;
+    margin: 16px 0;
+}
+
+.connection-id {
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    color: #165d9c;
+    margin-top: 7px;
+}
+
+.connection-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid #e4e9ef;
+    border-radius: 16px;
+    margin-top: 10px;
+    background: #fafcff;
+}
+
+.connection-status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.connection-status.pending {
+    background: #fff5d9;
+    color: #8a6500;
+}
+
+.connection-status.connected {
+    background: #e5f8ed;
+    color: #16723b;
+}
+
+.connection-status.rejected {
+    background: #ffe9e9;
+    color: #a22a2a;
+}
+
+.connection-input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid #ccd6e2;
+    font-size: 17px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.connection-input:focus {
+    border-color: #3988d4;
+    box-shadow: 0 0 0 3px rgba(57,136,212,.12);
+}
+
+.connection-section {
+    margin-top: 24px;
+}
+
+.connection-close {
+    border: 0;
+    background: #f0f3f7;
+    border-radius: 12px;
+    padding: 9px 13px;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.connection-copy {
+    border: 0;
+    background: #1769aa;
+    color: white;
+    border-radius: 12px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.connection-danger {
+    background: #fff0f0;
+    color: #a52c2c;
+}
+
+.connection-success {
+    background: #effbf4;
+    border: 1px solid #c9efd8;
+    color: #176b3a;
+    padding: 15px;
+    border-radius: 15px;
+    margin-top: 15px;
+}
+
+.connection-empty {
+    padding: 20px;
+    text-align: center;
+    background: #f8fafc;
+    border-radius: 16px;
+    color: #657386;
+}
+
+.low-literacy .connection-modal {
+    font-size: 18px;
+}
+
+.low-literacy .connection-input {
+    min-height: 58px;
+    font-size: 19px;
+}
+
+.low-literacy .connection-row button {
+    min-height: 50px;
+    font-size: 17px;
+}
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+<div id="toast" class="toast hidden"></div>
+<div id="modal" class="modal hidden"></div>
+
+<script>
+'use strict';
+
+/* =========================
+   SMRITIAI CORE
+========================= */
+
+const KEY='smritiai_v3';
+
+const LANG={
+en:{
+welcome:'Welcome to SmritiAI',subtitle:'Cognitive support, memory assistance and everyday routine support.',
+login:'Login',signup:'Register',patient:'Patient',caregiver:'Caregiver',email:'Email / Login ID',password:'Password',
+home:'Home',games:'Cognitive Games',album:'Memory Album',reminders:'Reminders',stories:'Story Mode',summary:'Session Summary',
+overview:'Overview',analysis:'Patient Analysis',assignments:'Assignments',sessions:'Sessions',logout:'Logout',
+start:'Start',continue:'Continue',save:'Save',cancel:'Cancel',listen:'Tell Story',stop:'Stop Listening',play:'Play Story',
+music:'Game Music',level:'Level',score:'Score',accuracy:'Accuracy',back:'Back',next:'Next',
+hello:'Hello',today:'Today',recent:'Recent Sessions',noData:'No data yet.',
+academic:'Academic prototype — not a diagnostic or treatment system.'
+},
+hi:{
+welcome:'SmritiAI में आपका स्वागत है',subtitle:'संज्ञानात्मक सहायता, स्मृति सहायता और दैनिक दिनचर्या सहायता।',
+login:'लॉगिन',signup:'रजिस्टर',patient:'मरीज',caregiver:'केयरगिवर',email:'ईमेल / लॉगिन आईडी',password:'पासवर्ड',
+home:'होम',games:'कॉग्निटिव गेम्स',album:'मेमोरी एल्बम',reminders:'रिमाइंडर',stories:'स्टोरी मोड',summary:'सेशन सारांश',
+overview:'ओवरव्यू',analysis:'मरीज विश्लेषण',assignments:'असाइनमेंट',sessions:'सेशन',logout:'लॉगआउट',
+start:'शुरू करें',continue:'जारी रखें',save:'सेव',cancel:'रद्द करें',listen:'कहानी बोलें',stop:'सुनना बंद करें',play:'कहानी सुनें',
+music:'गेम म्यूजिक',level:'लेवल',score:'स्कोर',accuracy:'सटीकता',back:'वापस',next:'अगला',
+hello:'नमस्ते',today:'आज',recent:'हाल के सेशन',noData:'अभी कोई डेटा नहीं।',
+academic:'शैक्षणिक प्रोटोटाइप — यह निदान या उपचार प्रणाली नहीं है।'
+},
+mr:{
+welcome:'SmritiAI मध्ये आपले स्वागत आहे',subtitle:'संज्ञानात्मक सहाय्य, स्मरणशक्ती सहाय्य आणि दैनंदिन दिनचर्या.',
+login:'लॉगिन',signup:'नोंदणी',patient:'रुग्ण',caregiver:'केअरगिव्हर',email:'ईमेल / लॉगिन आयडी',password:'पासवर्ड',
+home:'होम',games:'कॉग्निटिव्ह गेम्स',album:'मेमरी अल्बम',reminders:'स्मरणपत्रे',stories:'स्टोरी मोड',summary:'सेशन सारांश',
+overview:'ओव्हरव्ह्यू',analysis:'रुग्ण विश्लेषण',assignments:'असाइनमेंट',sessions:'सेशन्स',logout:'लॉगआउट',
+start:'सुरू करा',continue:'पुढे',save:'सेव्ह',cancel:'रद्द करा',listen:'कथा सांगा',stop:'ऐकणे थांबवा',play:'कथा ऐका',
+music:'गेम म्युझिक',level:'लेव्हल',score:'स्कोअर',accuracy:'अचूकता',back:'मागे',next:'पुढे',
+hello:'नमस्कार',today:'आज',recent:'अलीकडील सेशन्स',noData:'अजून डेटा नाही.',
+academic:'शैक्षणिक प्रोटोटाइप — ही निदान किंवा उपचार प्रणाली नाही.'
+}
+};
+
+let db=JSON.parse(localStorage.getItem(KEY)||'null');
+if(!db){
+db={
+users:[
+{id:'p1',role:'patient',name:'Aarav Sharma',email:'patient@smriti.ai',password:'1234',language:'en'},
+{id:'c1',role:'caregiver',name:'Meera Sharma',email:'caregiver@smriti.ai',password:'1234',language:'en'}
+],
+sessions:[],
+stories:[],
+reminders:[],
+assignments:[],
+games:{},
+active:null
+};
+saveDB();
+}
+
+function saveDB(){localStorage.setItem(KEY,JSON.stringify(db))}
+function T(k){let l=db.active?.language||'en';return (LANG[l]&&LANG[l][k])||LANG.en[k]||k}
+function toast(s){let x=document.getElementById('toast');x.textContent=s;x.classList.remove('hidden');clearTimeout(window.__toast);window.__toast=setTimeout(()=>x.classList.add('hidden'),2500)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function user(){return db.users.find(x=>x.id===db.active?.userId)}
+function patientUser(){return db.users.find(x=>x.role==='patient')}
+function speak(text){
+if(!('speechSynthesis' in window))return;
+speechSynthesis.cancel();
+let u=new SpeechSynthesisUtterance(text);
+u.lang={en:'en-IN',hi:'hi-IN',mr:'mr-IN'}[db.active?.language||'en'];
+u.rate=.9;
+speechSynthesis.speak(u);
+}
+
+/* =========================
+   AUDIO
+========================= */
+let audioCtx=null,musicTimer=null,musicOn=true;
+function musicStart(){
+if(!musicOn)return;
+if(audioCtx) return;
+try{
+audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+let notes=[261.63,329.63,392,329.63],i=0;
+musicTimer=setInterval(()=>{
+if(!audioCtx)return;
+let o=audioCtx.createOscillator(),g=audioCtx.createGain();
+o.frequency.value=notes[i++%notes.length];o.type='sine';g.gain.value=.025;
+o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.25);
+},650);
+}catch(e){}
+}
+function musicStop(){if(musicTimer)clearInterval(musicTimer);musicTimer=null;if(audioCtx){audioCtx.close();audioCtx=null}}
+function toggleMusic(){musicOn=!musicOn;if(!musicOn)musicStop();toast(musicOn?'Music ON':'Music OFF')}
+
+/* =========================
+   SPEECH — SINGLE INSTANCE
+========================= */
+let recognition=null, listening=false, storyListening=false, storyFinal='';
+function setupRecognition(){
+let SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR)return null;
+let r=new SR();
+r.continuous=false;
+r.interimResults=true;
+r.maxAlternatives=1;
+r.lang={en:'en-IN',hi:'hi-IN',mr:'mr-IN'}[db.active?.language||'en'];
+return r;
+}
+
+function startStoryListening(){
+if(storyListening)return;
+if(!recognition)recognition=setupRecognition();
+if(!recognition){toast('Speech recognition is not supported in this browser.');return}
+storyListening=true;
+storyFinal='';
+document.getElementById('storyTranscript').value='';
+recognition.onresult=e=>{
+let finalText='';
+let interim='';
+for(let i=e.resultIndex;i<e.results.length;i++){
+let txt=e.results[i][0].transcript.trim();
+if(e.results[i].isFinal) finalText+=' '+txt;
+else interim+=' '+txt;
+}
+if(finalText){
+let clean=finalText.trim();
+if(clean && clean!==storyFinal.trim()){
+storyFinal=(storyFinal+' '+clean).trim();
+document.getElementById('storyTranscript').value=storyFinal;
+}
+}else{
+document.getElementById('storyTranscript').value=(storyFinal+' '+interim).trim();
+}
+};
+recognition.onerror=e=>{
+storyListening=false;
+updateStoryButton();
+if(e.error!=='no-speech')toast('Microphone: '+e.error);
+};
+recognition.onend=()=>{
+storyListening=false;
+updateStoryButton();
+};
+recognition.start();
+updateStoryButton();
+}
+function stopStoryListening(){
+if(!recognition)return;
+try{recognition.stop()}catch(e){}
+storyListening=false;
+updateStoryButton();
+}
+function updateStoryButton(){
+let b=document.getElementById('storyListenBtn');
+if(b)b.textContent=storyListening?T('stop'):T('listen');
+}
+
+/* =========================
+   LOGIN
+========================= */
+let authMode='login',authRole='patient';
+function auth(){
+document.getElementById('root').innerHTML=`
+<div class="auth">
+<div class="authleft">
+<div class="logo">Smriti<span>AI</span></div>
+<h1>${T('welcome')}</h1>
+<p>${T('subtitle')}</p>
+<div class="card" style="max-width:600px;margin-top:20px">
+<b>Designed for memory support</b><p class="muted">Cognitive games • Memory assistance • Routine support • Caregiver insights • Story preservation</p>
+</div>
+</div>
+<div class="authright">
+<div class="authcard">
+<div class="row between"><h2 id="authTitle">${authMode==='login'?T('login'):T('signup')}</h2>
+<select id="language" style="width:125px" onchange="changeAuthLang(this.value)">
+<option value="en">English</option><option value="hi">हिन्दी</option><option value="mr">मराठी</option>
+</select></div>
+<div class="tabs"><button class="${authMode==='login'?'active':''}" onclick="authMode='login';auth()">${T('login')}</button><button class="${authMode==='signup'?'active':''}" onclick="authMode='signup';auth()">${T('signup')}</button></div>
+<div class="role"><button class="${authRole==='patient'?'active':''}" onclick="authRole='patient';auth()">👤 ${T('patient')}</button><button class="${authRole==='caregiver'?'active':''}" onclick="authRole='caregiver';auth()">👩‍⚕️ ${T('caregiver')}</button></div>
+<div class="field"><label>${T('email')}</label><input id="email" placeholder="name@example.com"></div>
+<div class="field"><label>${T('password')}</label><input id="password" type="password" placeholder="••••"></div>
+<div id="nameField" class="${authMode==='signup'?'':'hidden'}"><div class="field"><label>Full name</label><input id="name" placeholder="Your name"></div></div>
+<button class="primary" style="width:100%" onclick="submitAuth()">${authMode==='login'?T('login'):T('signup')}</button>
+<div class="small muted" style="margin-top:16px">Demo: patient@smriti.ai / 1234<br>Demo: caregiver@smriti.ai / 1234</div>
+</div></div></div>`;
+document.getElementById('language').value=db.active?.language||'en';
+}
+function changeAuthLang(l){db.active=db.active||{};db.active.language=l;auth()}
+function submitAuth(){
+let email=document.getElementById('email').value.trim().toLowerCase();
+let pass=document.getElementById('password').value;
+if(!email||!pass){toast('Enter login ID and password');return}
+if(authMode==='signup'){
+let exists=db.users.find(x=>x.email===email);
+if(exists){toast('Account already exists');return}
+let u={id:uid(),role:authRole,name:document.getElementById('name').value.trim()||'SmritiAI User',email,password:pass,language:document.getElementById('language').value};
+db.users.push(u);db.active={userId:u.id,language:u.language};saveDB();renderApp();return;
+}
+let u=db.users.find(x=>x.email===email&&x.password===pass&&x.role===authRole);
+if(!u){toast('Incorrect login or role');return}
+db.active={userId:u.id,language:u.language||'en'};saveDB();renderApp();
+}
+
+/* =========================
+   APP SHELL
+========================= */
+let page='home';
+function renderApp(){
+if(!db.active||!user()){auth();return}
+document.getElementById('root').innerHTML=`
+<div class="app">
+<header class="top"><div class="logo">Smriti<span>AI</span></div><div class="userbox"><select onchange="setLanguage(this.value)" style="width:115px"><option value="en">English</option><option value="hi">हिन्दी</option><option value="mr">मराठी</option></select><div class="avatar">${esc(user().name[0]||'S')}</div><b>${esc(user().name)}</b></div></header>
+<div class="layout"><aside class="side" id="side"></aside><main class="main" id="main"></main></div>
+</div>`;
+document.querySelector('.top select').value=db.active.language||'en';
+renderNav();renderPage();installConnectionSystem();
+}
+function setLanguage(l){db.active.language=l;let u=user();if(u)u.language=l;saveDB();renderApp()}
+function navItem(id,label,icon){return `<button class="nav ${page===id?'active':''}" onclick="go('${id}')">${icon} &nbsp;${label}</button>`}
+function renderNav(){
+let caregiver=user().role==='caregiver';
+document.getElementById('side').innerHTML=caregiver?`
+${navItem('home',T('overview'),'🏠')}
+${navItem('analysis',T('analysis'),'📊')}
+${navItem('sessions',T('sessions'),'🧠')}
+${navItem('assignments',T('assignments'),'📌')}
+${navItem('stories',T('stories'),'📖')}
+${navItem('reminders',T('reminders'),'⏰')}
+<hr>${navItem('logout',T('logout'),'🚪')}
+`:
+`${navItem('home',T('home'),'🏠')}
+${navItem('games',T('games'),'🎮')}
+${navItem('album',T('album'),'🖼️')}
+${navItem('reminders',T('reminders'),'⏰')}
+${navItem('stories',T('stories'),'📖')}
+${navItem('summary',T('summary'),'📈')}
+<hr>${navItem('logout',T('logout'),'🚪')}`;
+}
+function go(p){
+if(p==='logout'){musicStop();speechSynthesis?.cancel();db.active=null;saveDB();auth();return}
+page=p;renderNav();renderPage();installConnectionSystem();installConnectionSystem();
+}
+function renderPage(){
+if(user().role==='caregiver'){
+if(page==='home')caregiverHome();
+else if(page==='analysis')caregiverAnalysis();
+else if(page==='sessions')caregiverSessions();
+else if(page==='assignments')caregiverAssignments();
+else if(page==='stories')caregiverStories();
+else if(page==='reminders')caregiverReminders();
+else caregiverHome();
+}else{
+if(page==='home')patientHome();
+else if(page==='games')gamesHome();
+else if(page==='album')album();
+else if(page==='reminders')reminders();
+else if(page==='stories')stories();
+else if(page==='summary')summary();
+else patientHome();
+}
+}
+
+/* =========================
+   PATIENT
+========================= */
+function patientHome(){
+let u=user(),ss=db.sessions.filter(x=>x.patientId===u.id),last=ss[ss.length-1];
+document.getElementById('main').innerHTML=`
+<div class="row between"><div><h1>${T('hello')}, ${esc(u.name.split(' ')[0])} 👋</h1><p class="muted">${T('today')} • ${new Date().toLocaleDateString()}</p></div><button class="voice" onclick="voiceCommand()">🎙️</button></div>
+<div class="grid g3" style="margin-top:20px">
+<div class="card"><span class="badge">Today's focus</span><h3 style="margin-top:14px">🧠 Cognitive Session</h3><p class="muted">Adaptive games based on your recent performance.</p><button class="primary" onclick="go('games')">${T('start')}</button></div>
+<div class="card"><span class="badge">Memory</span><h3 style="margin-top:14px">🖼️ Memory Album</h3><p class="muted">Keep meaningful moments and memories.</p><button class="secondary" onclick="go('album')">Open Album</button></div>
+<div class="card"><span class="badge">Story</span><h3 style="margin-top:14px">📖 Story Mode</h3><p class="muted">Record a story connected to a photo.</p><button class="secondary" onclick="go('stories')">Open Story Mode</button></div>
+</div>
+<div class="grid g2" style="margin-top:18px">
+<div class="card"><h2>Performance</h2><div class="grid g2"><div><span class="muted">Sessions</span><div class="stat">${ss.length}</div></div><div><span class="muted">Last accuracy</span><div class="stat">${last?last.accuracy+'%':'—'}</div></div></div></div>
+<div class="card"><h2>🎙️ Voice Companion</h2><p class="muted">Try: “open games”, “open stories”, “open reminders”, “read my stories”.</p><button class="success" onclick="voiceCommand()">Start Voice</button></div>
+</div>`;
+}
+function voiceCommand(){
+let r=setupRecognition();
+if(!r){toast('Speech recognition is unavailable');return}
+r.continuous=false;r.interimResults=false;
+r.onresult=e=>{
+let text=e.results[0][0].transcript.toLowerCase();
+speak('I heard '+text);
+if(text.includes('game'))go('games');
+else if(text.includes('story'))go('stories');
+else if(text.includes('album')||text.includes('memory'))go('album');
+else if(text.includes('reminder'))go('reminders');
+else if(text.includes('summary'))go('summary');
+else toast('Try: open games, stories, album or reminders');
+};
+r.onerror=()=>toast('I could not hear that. Try again.');
+try{r.start()}catch(e){}
+}
+
+/* =========================
+   GAMES
+========================= */
+const GAME_NAMES=[
+['memory','Memory Match','Match the hidden pairs.'],
+['pattern','Pattern Sequence','Remember the sequence.'],
+['find','Find the Object','Find the requested object.'],
+['color','Pattern Match','Choose the matching pattern.'],
+['number','Number Memory','Remember the number.'],
+['odd','Find the Difference','Find the different symbol.']
+];
+function gamesHome(){
+document.getElementById('main').innerHTML=`
+<div class="row between"><div><h1>${T('games')}</h1><p class="muted">Continuous adaptive cognitive activities. There is no level limit.</p></div><button class="secondary" onclick="toggleMusic()">🎵 ${T('music')}</button></div>
+<div class="grid g3" style="margin-top:20px">${GAME_NAMES.map((g,i)=>`<div class="card"><div style="font-size:35px">${['🧩','🔢','🔎','🎨','🧠','🔷'][i]}</div><h2>${g[1]}</h2><p class="muted">${g[2]}</p><button class="primary" onclick="startGame('${g[0]}')">${T('start')}</button></div>`).join('')}</div>`;
+}
+let gameState=null;
+function startGame(type){
+musicStart();
+let key=user().id+'_'+type;
+let saved=db.games[key]||{level:1,total:0,correct:0};
+gameState={type,level:saved.level,total:saved.total,correct:saved.correct,streak:0,started:Date.now(),data:null};
+renderGame();
+}
+function renderGame(){
+let g=GAME_NAMES.find(x=>x[0]===gameState.type);
+document.getElementById('main').innerHTML=`
+<div class="row between"><div><button class="secondary" onclick="endGame()">← ${T('back')}</button></div><div><span class="badge">${g[1]}</span> <span class="badge">${T('level')} ${gameState.level}</span> <span class="badge">${T('score')} ${gameState.correct}</span></div></div>
+<div class="card" style="margin-top:18px"><div class="row between"><div><h1>${g[1]}</h1><p class="muted">Level ${gameState.level} • Continuous mode</p></div><button class="secondary" onclick="toggleMusic()">🎵</button></div><div id="gameArea"></div></div>`;
+nextRound();
+}
+function nextRound(){
+let a=document.getElementById('gameArea');if(!a)return;
+let t=gameState.type;
+if(t==='memory')memoryRound(a);
+if(t==='pattern')patternRound(a);
+if(t==='find')findRound(a);
+if(t==='color')colorRound(a);
+if(t==='number')numberRound(a);
+if(t==='odd')oddRound(a);
+}
+function record(correct){
+gameState.total++;
+if(correct){gameState.correct++;gameState.streak++}else gameState.streak=0;
+let acc=Math.round(gameState.correct/gameState.total*100);
+let key=user().id+'_'+gameState.type;
+db.games[key]={level:gameState.level,total:gameState.total,correct:gameState.correct,accuracy:acc};
+saveDB();
+setTimeout(()=>{gameState.level++;nextRound()},450);
+}
+function memoryRound(a){
+let n=gameState.level<4?3:4;
+let vals=[...Array(n)].map((_,i)=>i+1);let cards=[...vals,...vals].sort(()=>Math.random()-.5);
+a.innerHTML=`<p class="muted">Find all matching pairs.</p><div class="game-grid" id="mg"></div>`;
+let grid=document.getElementById('mg'),open=[],matched=0;
+cards.forEach((v,i)=>{let b=document.createElement('button');b.className='tile';b.textContent='?';b.onclick=()=>{
+if(open.length>=2||b.classList.contains('matched')||open.some(x=>x.i===i))return;
+b.textContent=v;b.classList.add('revealed');open.push({i,v,b});
+if(open.length===2){
+if(open[0].v===open[1].v){open.forEach(x=>x.b.classList.add('matched'));matched+=2;open=[];if(matched===cards.length){record(true)}}else{let q=[...open];open=[];setTimeout(()=>q.forEach(x=>{x.b.textContent='?';x.b.classList.remove('revealed')}),550)}
+}};grid.appendChild(b)});
+}
+function patternRound(a){
+let len=Math.min(3+Math.floor(gameState.level/3),8),seq=[...Array(len)].map(()=>Math.floor(Math.random()*4)+1);
+a.innerHTML=`<p class="muted">Watch the pattern.</p><div id="show" style="font-size:40px;text-align:center;margin:30px">${seq.join(' • ')}</div><div class="options">${[...Array(4)].map((_,i)=>`<button class="option" onclick="patternAnswer(${i+1},${seq[len-1]})">${i+1}</button>`).join('')}</div>`;
+setTimeout(()=>{let x=document.getElementById('show');if(x)x.textContent='? • ? • ? • ?'},1200);
+}
+function patternAnswer(x,correct){record(x===correct)}
+function findRound(a){
+let symbols=['🍎','⭐','🔵','🟩','❤️','🔺','🌙','☀️'],target=symbols[Math.floor(Math.random()*symbols.length)];
+let count=12,items=[...Array(count)].map(()=>symbols[Math.floor(Math.random()*symbols.length)]);let pos=Math.floor(Math.random()*count);items[pos]=target;
+a.innerHTML=`<p class="muted">Find: <b style="font-size:25px">${target}</b></p><div class="options">${items.map((x,i)=>`<button class="option" onclick="findAnswer('${esc(x)}','${esc(target)}')">${x}</button>`).join('')}</div>`;
+window.findAnswer=(x,t)=>record(x===t);
+}
+function colorRound(a){
+let target=Math.floor(Math.random()*4),colors=['🔴','🔵','🟢','🟡'];
+a.innerHTML=`<p class="muted">Which symbol matches the target?</p><div style="font-size:60px;text-align:center">${colors[target]}</div><div class="options">${colors.map((x,i)=>`<button class="option" onclick="record(${i===target})">${x}</button>`).join('')}</div>`;
+}
+function numberRound(a){
+let len=Math.min(3+Math.floor(gameState.level/2),10),n=Math.floor(Math.random()*Math.pow(10,len)).toString().padStart(len,'0');
+a.innerHTML=`<div style="text-align:center"><p class="muted">Remember this number.</p><div style="font-size:42px;font-weight:800" id="num">${n}</div><div id="numInput" class="hidden"><input id="answer" placeholder="Type the number" style="max-width:250px"><button class="primary" onclick="record(document.getElementById('answer').value=== '${n}')">Check</button></div></div>`;
+setTimeout(()=>{document.getElementById('num').textContent='••••';document.getElementById('numInput').classList.remove('hidden')},1300);
+}
+function oddRound(a){
+let base=['🔵','🔵','🔵','🔵','🟢','🔵','🔵','🔵'];let pos=Math.floor(Math.random()*base.length);
+a.innerHTML=`<p class="muted">Find the different symbol.</p><div class="options">${base.map((x,i)=>`<button class="option" onclick="record(${i===pos})">${x}</button>`).join('')}</div>`;
+}
+function endGame(){
+musicStop();
+let acc=gameState.total?Math.round(gameState.correct/gameState.total*100):0;
+db.sessions.push({id:uid(),patientId:user().id,date:new Date().toISOString(),game:GAME_NAMES.find(x=>x[0]===gameState.type)[1],level:gameState.level,accuracy:acc,correct:gameState.correct,total:gameState.total,duration:Math.round((Date.now()-gameState.started)/1000)});
+saveDB();gameState=null;go('summary');
+}
+
+/* =========================
+   MEMORY ALBUM
+========================= */
+function album(){
+let stories=db.stories.filter(x=>x.patientId===user().id);
+document.getElementById('main').innerHTML=`
+<div class="row between"><div><h1>${T('album')}</h1><p class="muted">Your saved memories and meaningful moments.</p></div><button class="primary" onclick="go('stories')">+ Add Memory Story</button></div>
+<div class="album" style="margin-top:20px">${stories.length?stories.map(s=>`<div class="card"><img class="story-photo" src="${s.photo||''}" onerror="this.style.display='none'"><h3>${esc(s.title)}</h3><p class="small muted">${new Date(s.date).toLocaleDateString()}</p><button class="secondary" onclick="playStory('${s.id}')">${T('play')}</button></div>`).join(''):`<div class="card empty">No memories yet. Create your first Story Mode memory.</div>`}</div>`;
+}
+
+/* =========================
+   STORY MODE
+========================= */
+function stories(){
+let ss=db.stories.filter(x=>x.patientId===user().id);
+document.getElementById('main').innerHTML=`
+<div class="row between"><div><h1>📖 ${T('stories')}</h1><p class="muted">Upload one photo, tell the story once, save it, and listen later.</p></div></div>
+<div class="grid g2" style="margin-top:20px">
+<div class="card">
+<h2>Create Memory Story</h2>
+<div class="field"><label>Photo</label><input id="storyPhoto" type="file" accept="image/*" onchange="previewPhoto(event)"></div>
+<img id="photoPreview" class="story-photo hidden">
+<div class="field"><label>Story title</label><input id="storyTitle" placeholder="e.g. Family trip to Goa"></div>
+<div class="field"><label>Story / memory</label><textarea id="storyTranscript" rows="8" placeholder="Click Tell Story and speak naturally."></textarea></div>
+<div class="row"><button id="storyListenBtn" class="primary" onclick="${storyListening?'stopStoryListening()':'startStoryListening()'}">${storyListening?T('stop'):T('listen')}</button><button class="success" onclick="saveStory()">💾 ${T('save')}</button></div>
+<p class="small muted" style="margin-top:12px">Speech is captured once per recording. Interim speech is never saved as duplicate text.</p>
+</div>
+<div class="card"><h2>Saved Stories</h2>${ss.length?ss.map(s=>`<div class="card" style="margin:10px 0;padding:15px"><div class="row between"><div><b>${esc(s.title)}</b><div class="small muted">${new Date(s.date).toLocaleDateString()}</div></div><span class="badge">${s.assigned?'Assigned':'Saved'}</span></div><p>${esc(s.text).slice(0,180)}${s.text.length>180?'…':''}</p><button class="secondary" onclick="playStory('${s.id}')">🔊 ${T('play')}</button></div>`).join(''):`<div class="empty">${T('noData')}</div>`}</div>
+</div>`;
+}
+function previewPhoto(e){
+let f=e.target.files[0];if(!f)return;
+let r=new FileReader();r.onload=()=>{let x=document.getElementById('photoPreview');x.src=r.result;x.classList.remove('hidden');x.dataset.data=r.result};r.readAsDataURL(f);
+}
+function saveStory(){
+let title=document.getElementById('storyTitle').value.trim()||'My Memory';
+let text=document.getElementById('storyTranscript').value.trim();
+let photo=document.getElementById('photoPreview').dataset.data||'';
+if(!text){toast('Tell the story first');return}
+db.stories.push({id:uid(),patientId:user().id,title,text,photo,date:new Date().toISOString(),assigned:false});
+saveDB();speak('Your memory story has been saved.');toast('Story saved');stories();
+}
+function playStory(id){
+let s=db.stories.find(x=>x.id===id);if(!s)return;
+speak(s.title+'. '+s.text);
+}
+
+/* =========================
+   REMINDERS
+========================= */
+function reminders(){
+let rs=db.reminders.filter(x=>x.patientId===user().id);
+document.getElementById('main').innerHTML=`
+<div class="row between"><div><h1>⏰ ${T('reminders')}</h1><p class="muted">Daily routine support.</p></div><button class="primary" onclick="addReminder()">+ Add Reminder</button></div>
+<div class="grid g3" style="margin-top:20px">${rs.length?rs.map(r=>`<div class="card"><span class="badge">${esc(r.time)}</span><h2 style="margin-top:12px">${esc(r.title)}</h2><p class="muted">${esc(r.note||'')}</p><button class="danger" onclick="deleteReminder('${r.id}')">Delete</button></div>`).join(''):`<div class="card empty">No reminders.</div>`}</div>`;
+}
+function addReminder(){
+let title=prompt('Reminder title');if(!title)return;
+let time=prompt('Time, e.g. 09:00','09:00')||'09:00';
+db.reminders.push({id:uid(),patientId:user().id,title,time,note:'',done:false});saveDB();reminders();
+}
+function deleteReminder(id){db.reminders=db.reminders.filter(x=>x.id!==id);saveDB();reminders()}
+
+/* =========================
+   SESSION SUMMARY
+========================= */
+function summary(){
+let ss=db.sessions.filter(x=>x.patientId===user().id).slice(-10).reverse();
+let avg=ss.length?Math.round(ss.reduce((a,b)=>a+b.accuracy,0)/ss.length):0;
+document.getElementById('main').innerHTML=`
+<h1>📈 ${T('summary')}</h1><p class="muted">Performance support metrics from completed sessions.</p>
+<div class="grid g3" style="margin-top:20px"><div class="card"><span class="muted">Sessions</span><div class="stat">${ss.length}</div></div><div class="card"><span class="muted">Average accuracy</span><div class="stat">${avg}%</div></div><div class="card"><span class="muted">Latest level</span><div class="stat">${ss[0]?.level||'—'}</div></div></div>
+<div class="card" style="margin-top:18px"><h2>Recent Sessions</h2>${ss.length?`<table class="table"><tr><th>Date</th><th>Game</th><th>Level</th><th>Accuracy</th></tr>${ss.map(s=>`<tr><td>${new Date(s.date).toLocaleString()}</td><td>${esc(s.game)}</td><td>${s.level}</td><td>${s.accuracy}%</td></tr>`).join('')}</table>`:`<div class="empty">${T('noData')}</div>`}</div>`;
+}
+
+/* =========================
+   CAREGIVER
+========================= */
+function caregiverHome(){
+let p=patientUser(),ss=db.sessions.filter(x=>x.patientId===p?.id),st=db.stories.filter(x=>x.patientId===p?.id),avg=ss.length?Math.round(ss.reduce((a,b)=>a+b.accuracy,0)/ss.length):0;
+document.getElementById('main').innerHTML=`
+<div><h1>Caregiver Dashboard</h1><p class="muted">Monitor support activity for ${esc(p?.name||'patient')}.</p></div>
+<div class="grid g4" style="margin-top:20px"><div class="card"><span class="muted">Patient</span><h2>${esc(p?.name||'—')}</h2></div><div class="card"><span class="muted">Sessions</span><div class="stat">${ss.length}</div></div><div class="card"><span class="muted">Avg. accuracy</span><div class="stat">${avg}%</div></div><div class="card"><span class="muted">Stories</span><div class="stat">${st.length}</div></div></div>
+<div class="grid g2" style="margin-top:18px"><div class="card"><h2>Patient Analysis</h2><p class="muted">View activity, accuracy and session trends without assigning a diagnosis.</p><button class="primary" onclick="go('analysis')">Open Analysis</button></div><div class="card"><h2>Assignments</h2><p class="muted">Assign saved stories or reminders to the patient.</p><button class="secondary" onclick="go('assignments')">Manage Assignments</button></div></div>`;
+}
+function caregiverAnalysis(){
+let p=patientUser(),ss=db.sessions.filter(x=>x.patientId===p?.id),avg=ss.length?Math.round(ss.reduce((a,b)=>a+b.accuracy,0)/ss.length):0;
+let games={};ss.forEach(s=>{games[s.game]=games[s.game]||[];games[s.game].push(s.accuracy)});
+document.getElementById('main').innerHTML=`
+<h1>📊 Patient Analysis</h1><p class="muted">Observed support/performance metrics — not a medical diagnosis or dementia stage.</p>
+<div class="grid g3" style="margin-top:20px"><div class="card"><span class="muted">Average session accuracy</span><div class="stat">${avg}%</div></div><div class="card"><span class="muted">Completed sessions</span><div class="stat">${ss.length}</div></div><div class="card"><span class="muted">Stories preserved</span><div class="stat">${db.stories.filter(x=>x.patientId===p?.id).length}</div></div></div>
+<div class="card" style="margin-top:18px"><h2>Game Performance</h2>${Object.keys(games).length?Object.entries(games).map(([g,v])=>{let a=Math.round(v.reduce((x,y)=>x+y,0)/v.length);return `<div style="margin:18px 0"><div class="row between"><b>${esc(g)}</b><b>${a}%</b></div><div class="progress"><i style="width:${a}%"></i></div></div>`}).join(''):`<div class="empty">No completed sessions yet.</div>`}</div>`;
+}
+function caregiverSessions(){
+let p=patientUser(),ss=db.sessions.filter(x=>x.patientId===p?.id).slice().reverse();
+document.getElementById('main').innerHTML=`<h1>🧠 Sessions</h1><div class="card" style="margin-top:20px">${ss.length?`<table class="table"><tr><th>Date</th><th>Game</th><th>Level</th><th>Accuracy</th><th>Duration</th></tr>${ss.map(s=>`<tr><td>${new Date(s.date).toLocaleString()}</td><td>${esc(s.game)}</td><td>${s.level}</td><td>${s.accuracy}%</td><td>${s.duration}s</td></tr>`).join('')}</table>`:`<div class="empty">${T('noData')}</div>`}</div>`;
+}
+function caregiverStories(){
+let p=patientUser(),ss=db.stories.filter(x=>x.patientId===p?.id);
+document.getElementById('main').innerHTML=`<h1>📖 Patient Stories</h1><div class="grid g2" style="margin-top:20px">${ss.length?ss.map(s=>`<div class="card"><h2>${esc(s.title)}</h2><p>${esc(s.text)}</p><span class="badge">${s.assigned?'Assigned':'Not assigned'}</span><br><br><button class="primary" onclick="assignStory('${s.id}')">${s.assigned?'Assigned':'Assign to Patient'}</button></div>`).join(''):`<div class="card empty">Patient has not created stories yet.</div>`}</div>`;
+}
+function assignStory(id){let s=db.stories.find(x=>x.id===id);if(s){s.assigned=true;db.assignments.push({id:uid(),type:'story',itemId:id,date:new Date().toISOString()});saveDB();toast('Story assigned');caregiverStories()}}
+function caregiverAssignments(){
+let p=patientUser();
+document.getElementById('main').innerHTML=`<h1>📌 Assignments</h1><div class="card" style="margin-top:20px"><h2>Stories</h2>${db.stories.filter(x=>x.patientId===p?.id).map(s=>`<div class="row between" style="padding:12px 0;border-bottom:1px solid #edf1f5"><span>${esc(s.title)}</span><button class="${s.assigned?'secondary':'primary'}" onclick="assignStory('${s.id}')">${s.assigned?'Assigned':'Assign'}</button></div>`).join('')||'<div class="empty">No stories available.</div>'}</div>`;
+}
+function caregiverReminders(){
+let p=patientUser(),rs=db.reminders.filter(x=>x.patientId===p?.id);
+document.getElementById('main').innerHTML=`<h1>⏰ Patient Reminders</h1><div class="grid g3" style="margin-top:20px">${rs.map(r=>`<div class="card"><span class="badge">${esc(r.time)}</span><h2>${esc(r.title)}</h2><p class="muted">${esc(r.note||'')}</p></div>`).join('')||'<div class="card empty">No reminders.</div>'}</div>`;
+}
+
+/* ============================================================
+   SMRITI_CONNECTION_SYSTEM_V1
+   Patient <-> Caregiver connection by unique ID
+   ============================================================ */
+
+function ensureConnectionDB() {
+    if (!db.connections) {
+        db.connections = [];
+    }
+
+    /*
+      Give every existing account a permanent demo-safe ID.
+      New accounts can also receive an ID automatically.
+    */
+    db.users.forEach(function(u) {
+        if (!u.connectionId) {
+            if (u.role === 'caregiver') {
+                u.connectionId = makeConnectionId('CG');
+            } else {
+                u.connectionId = makeConnectionId('PT');
+            }
+        }
+    });
+
+    saveDB();
+}
+
+function makeConnectionId(roleCode) {
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var value = '';
+
+    for (var i = 0; i < 4; i++) {
+        value += chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    var id = 'SMR-' + roleCode + '-' + value;
+
+    if (db.users.some(function(u) {
+        return u.connectionId === id;
+    })) {
+        return makeConnectionId(roleCode);
+    }
+
+    return id;
+}
+
+function currentConnection() {
+    ensureConnectionDB();
+
+    var u = user();
+    if (!u) return null;
+
+    return db.connections.find(function(c) {
+        return c.patientId === u.id || c.caregiverId === u.id;
+    }) || null;
+}
+
+function patientConnections() {
+    ensureConnectionDB();
+
+    var p = user();
+    if (!p) return [];
+
+    return db.connections.filter(function(c) {
+        return c.patientId === p.id;
+    });
+}
+
+function caregiverConnections() {
+    ensureConnectionDB();
+
+    var c = user();
+    if (!c) return [];
+
+    return db.connections.filter(function(x) {
+        return x.caregiverId === c.id;
+    });
+}
+
+function getConnectedCaregiver() {
+    ensureConnectionDB();
+
+    var p = user();
+    if (!p || p.role !== 'patient') return null;
+
+    var connection = db.connections.find(function(c) {
+        return c.patientId === p.id && c.status === 'connected';
+    });
+
+    if (!connection) return null;
+
+    return db.users.find(function(u) {
+        return u.id === connection.caregiverId;
+    }) || null;
+}
+
+function getConnectedPatients() {
+    ensureConnectionDB();
+
+    var c = user();
+    if (!c || c.role !== 'caregiver') return [];
+
+    var ids = db.connections
+        .filter(function(x) {
+            return x.caregiverId === c.id && x.status === 'connected';
+        })
+        .map(function(x) {
+            return x.patientId;
+        });
+
+    return db.users.filter(function(u) {
+        return ids.indexOf(u.id) !== -1;
+    });
+}
+
+function findUserByConnectionId(id) {
+    ensureConnectionDB();
+
+    var clean = String(id || '').trim().toUpperCase();
+
+    return db.users.find(function(u) {
+        return String(u.connectionId || '').toUpperCase() === clean;
+    }) || null;
+}
+
+function connectPatientToCaregiver() {
+    ensureConnectionDB();
+
+    var p = user();
+
+    if (!p || p.role !== 'patient') {
+        toast('Only a patient account can send a caregiver request.');
+        return;
+    }
+
+    var input = document.getElementById('caregiverConnectionId');
+
+    if (!input) return;
+
+    var caregiverId = input.value.trim().toUpperCase();
+
+    if (!caregiverId) {
+        toast('Please enter the caregiver ID.');
+        return;
+    }
+
+    var caregiver = findUserByConnectionId(caregiverId);
+
+    if (!caregiver || caregiver.role !== 'caregiver') {
+        toast('Caregiver ID not found.');
+        return;
+    }
+
+    if (caregiver.id === p.id) {
+        toast('You cannot connect to yourself.');
+        return;
+    }
+
+    var existing = db.connections.find(function(c) {
+        return c.patientId === p.id &&
+               c.caregiverId === caregiver.id &&
+               c.status !== 'rejected';
+    });
+
+    if (existing) {
+        if (existing.status === 'connected') {
+            toast('You are already connected to this caregiver.');
+        } else {
+            toast('A connection request is already pending.');
+        }
+        return;
+    }
+
+    db.connections.push({
+        id: uid(),
+        patientId: p.id,
+        caregiverId: caregiver.id,
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    });
+
+    saveDB();
+
+    toast('Connection request sent to ' + caregiver.name + '.');
+
+    openConnectionPanel();
+}
+
+function acceptConnection(connectionId) {
+    ensureConnectionDB();
+
+    var c = db.connections.find(function(x) {
+        return x.id === connectionId;
+    });
+
+    if (!c) return;
+
+    if (!user() || user().role !== 'caregiver') return;
+
+    /*
+      One patient can have one active caregiver in this prototype.
+      If an existing active connection exists, keep it.
+    */
+    var existing = db.connections.find(function(x) {
+        return x.patientId === c.patientId &&
+               x.status === 'connected' &&
+               x.id !== c.id;
+    });
+
+    if (existing) {
+        toast('This patient is already connected to another caregiver.');
+        return;
+    }
+
+    c.status = 'connected';
+    c.updatedAt = new Date().toISOString();
+
+    saveDB();
+
+    toast('Patient connected successfully.');
+
+    openConnectionPanel();
+}
+
+function rejectConnection(connectionId) {
+    ensureConnectionDB();
+
+    var c = db.connections.find(function(x) {
+        return x.id === connectionId;
+    });
+
+    if (!c) return;
+
+    if (!user() || user().role !== 'caregiver') return;
+
+    c.status = 'rejected';
+    c.updatedAt = new Date().toISOString();
+
+    saveDB();
+
+    toast('Connection request rejected.');
+
+    openConnectionPanel();
+}
+
+function disconnectConnection(connectionId) {
+    ensureConnectionDB();
+
+    var c = db.connections.find(function(x) {
+        return x.id === connectionId;
+    });
+
+    if (!c) return;
+
+    if (!user()) return;
+
+    if (c.patientId !== user().id && c.caregiverId !== user().id) {
+        return;
+    }
+
+    c.status = 'rejected';
+    c.updatedAt = new Date().toISOString();
+
+    saveDB();
+
+    toast('Connection removed.');
+
+    openConnectionPanel();
+}
+
+function copyConnectionId() {
+    var u = user();
+
+    if (!u || !u.connectionId) return;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(u.connectionId)
+            .then(function() {
+                toast('ID copied.');
+            })
+            .catch(function() {
+                toast('Your ID is ' + u.connectionId);
+            });
+    } else {
+        toast('Your ID is ' + u.connectionId);
+    }
+}
+
+function connectionStatusText(status) {
+    if (status === 'connected') return 'CONNECTED';
+    if (status === 'pending') return 'PENDING';
+    if (status === 'rejected') return 'REJECTED';
+    return String(status || '').toUpperCase();
+}
+
+function connectionPatientName(connection) {
+    var p = db.users.find(function(u) {
+        return u.id === connection.patientId;
+    });
+
+    return p ? p.name : 'Unknown patient';
+}
+
+function connectionCaregiverName(connection) {
+    var c = db.users.find(function(u) {
+        return u.id === connection.caregiverId;
+    });
+
+    return c ? c.name : 'Unknown caregiver';
+}
+
+function connectionPanelHTML() {
+    ensureConnectionDB();
+
+    var u = user();
+
+    if (!u) return '';
+
+    var html = '';
+
+    html += '<div class="connection-overlay" id="connectionOverlay" onclick="closeConnectionPanel(event)">';
+    html += '<div class="connection-modal" onclick="event.stopPropagation()">';
+
+    html += '<div class="connection-header">';
+    html += '<div>';
+    html += '<div style="font-size:28px;font-weight:900;">🔗 Care Connection</div>';
+    html += '<div style="margin-top:6px;color:#687789;">Patient and caregiver connection</div>';
+    html += '</div>';
+    html += '<button class="connection-close" onclick="closeConnectionPanel()">✕</button>';
+    html += '</div>';
+
+    html += '<div class="connection-id-box">';
+    html += '<div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;">Your SmritiAI ID</div>';
+    html += '<div class="connection-id">' + esc(u.connectionId) + '</div>';
+    html += '<div style="margin-top:8px;color:#5e7085;">Share this ID only with the person you want to connect with.</div>';
+    html += '<button class="connection-copy" style="margin-top:12px;" onclick="copyConnectionId()">📋 Copy ID</button>';
+    html += '</div>';
+
+    if (u.role === 'patient') {
+
+        var connectedCaregiver = getConnectedCaregiver();
+
+        if (connectedCaregiver) {
+            html += '<div class="connection-success">';
+            html += '<strong>✓ Connected Caregiver</strong><br>';
+            html += esc(connectedCaregiver.name);
+            html += '<br><small>' + esc(connectedCaregiver.connectionId) + '</small>';
+            html += '</div>';
+
+            var connection = db.connections.find(function(c) {
+                return c.patientId === u.id &&
+                       c.caregiverId === connectedCaregiver.id &&
+                       c.status === 'connected';
+            });
+
+            if (connection) {
+                html += '<button class="connection-close connection-danger" style="margin-top:12px;" onclick="disconnectConnection(\'' + connection.id + '\')">Disconnect Caregiver</button>';
+            }
+
+        } else {
+
+            html += '<div class="connection-section">';
+            html += '<h3>Connect to your caregiver</h3>';
+            html += '<p style="color:#687789;">Enter the unique Caregiver ID provided by your caregiver.</p>';
+            html += '<input id="caregiverConnectionId" class="connection-input" placeholder="Example: SMR-CG-AB27" autocomplete="off">';
+            html += '<button class="primary" style="margin-top:12px;width:100%;" onclick="connectPatientToCaregiver()">🔗 Send Connection Request</button>';
+            html += '</div>';
+
+            var pending = db.connections.filter(function(c) {
+                return c.patientId === u.id && c.status === 'pending';
+            });
+
+            if (pending.length) {
+                html += '<div class="connection-section">';
+                html += '<h3>Pending Requests</h3>';
+
+                pending.forEach(function(c) {
+                    html += '<div class="connection-row">';
+                    html += '<div><strong>' + esc(connectionCaregiverName(c)) + '</strong><br>';
+                    html += '<small>Request sent</small></div>';
+                    html += '<span class="connection-status pending">PENDING</span>';
+                    html += '</div>';
+                });
+
+                html += '</div>';
+            }
+        }
+
+    } else {
+
+        var pendingRequests = db.connections.filter(function(c) {
+            return c.caregiverId === u.id && c.status === 'pending';
+        });
+
+        html += '<div class="connection-section">';
+        html += '<h3>Patient Requests</h3>';
+
+        if (!pendingRequests.length) {
+            html += '<div class="connection-empty">No pending patient connection requests.</div>';
+        } else {
+
+            pendingRequests.forEach(function(c) {
+
+                var p = db.users.find(function(x) {
+                    return x.id === c.patientId;
+                });
+
+                html += '<div class="connection-row">';
+                html += '<div>';
+                html += '<strong>' + esc(p ? p.name : 'Unknown patient') + '</strong><br>';
+                html += '<small>' + esc(p ? p.connectionId : '') + '</small>';
+                html += '</div>';
+
+                html += '<div style="display:flex;gap:8px;flex-wrap:wrap;">';
+                html += '<button class="primary" onclick="acceptConnection(\'' + c.id + '\')">✓ Accept</button>';
+                html += '<button class="connection-close connection-danger" onclick="rejectConnection(\'' + c.id + '\')">Reject</button>';
+                html += '</div>';
+
+                html += '</div>';
+            });
+        }
+
+        html += '</div>';
+
+        var patients = getConnectedPatients();
+
+        html += '<div class="connection-section">';
+        html += '<h3>Connected Patients</h3>';
+
+        if (!patients.length) {
+            html += '<div class="connection-empty">No connected patients yet.</div>';
+        } else {
+
+            patients.forEach(function(p) {
+
+                var con = db.connections.find(function(c) {
+                    return c.patientId === p.id &&
+                           c.caregiverId === u.id &&
+                           c.status === 'connected';
+                });
+
+                html += '<div class="connection-row">';
+                html += '<div>';
+                html += '<strong>👤 ' + esc(p.name) + '</strong><br>';
+                html += '<small>Patient ID: ' + esc(p.connectionId) + '</small>';
+                html += '</div>';
+
+                html += '<div style="display:flex;align-items:center;gap:10px;">';
+                html += '<span class="connection-status connected">CONNECTED</span>';
+
+                if (con) {
+                    html += '<button class="connection-close connection-danger" onclick="disconnectConnection(\'' + con.id + '\')">Disconnect</button>';
+                }
+
+                html += '</div>';
+                html += '</div>';
+            });
+        }
+
+        html += '</div>';
+    }
+
+    html += '</div>';
+    html += '</div>';
+
+    return html;
+}
+
+function openConnectionPanel() {
+    ensureConnectionDB();
+
+    var old = document.getElementById('connectionOverlay');
+
+    if (old) old.remove();
+
+    document.body.insertAdjacentHTML('beforeend', connectionPanelHTML());
+}
+
+function closeConnectionPanel(event) {
+    if (event && event.target && event.target.id !== 'connectionOverlay') {
+        return;
+    }
+
+    var el = document.getElementById('connectionOverlay');
+
+    if (el) el.remove();
+}
+
+function installConnectionButton() {
+    ensureConnectionDB();
+
+    var old = document.getElementById('connectionFab');
+
+    if (old) old.remove();
+
+    var u = user();
+
+    if (!u) return;
+
+    var button = document.createElement('button');
+
+    button.id = 'connectionFab';
+    button.className = 'connection-fab';
+    button.onclick = openConnectionPanel;
+
+    if (u.role === 'patient') {
+        var cg = getConnectedCaregiver();
+
+        button.innerHTML = cg
+            ? '🔗 Caregiver Connected'
+            : '🔗 Connect Caregiver';
+    } else {
+        var requests = db.connections.filter(function(c) {
+            return c.caregiverId === u.id && c.status === 'pending';
+        }).length;
+
+        button.innerHTML = requests
+            ? '🔗 Care Requests (' + requests + ')'
+            : '🔗 Patient Connections';
+    }
+
+    document.body.appendChild(button);
+}
+
+/*
+   Run this after the normal application render.
+   It does not replace the existing application.
+*/
+function installConnectionSystem() {
+    try {
+        ensureConnectionDB();
+        installConnectionButton();
+    } catch (e) {
+        console.error('Connection system error:', e);
+    }
+}
+
+ensureConnectionDB();
+
+/* =========================
+   START
+========================= */
+if(db.active&&db.users.some(x=>x.id===db.active.userId))renderApp();else auth();
+</script>
+<!-- SMRITI_RUDAS_BACKBONE_V2_START -->
+
+<style>
+/* ================= RUDAS BACKBONE ================= */
+
+#smritiRudasLauncher{
+ position:fixed;
+ right:22px;
+ bottom:22px;
+ z-index:99998;
+ border:0;
+ border-radius:50px;
+ padding:15px 22px;
+ background:#2563eb;
+ color:white;
+ font-weight:800;
+ box-shadow:0 10px 30px rgba(37,99,235,.25);
+ cursor:pointer;
+}
+
+#smritiRudasOverlay{
+ display:none;
+ position:fixed;
+ inset:0;
+ z-index:99999;
+ background:rgba(15,23,42,.62);
+ backdrop-filter:blur(5px);
+ overflow:auto;
+ padding:25px;
+}
+
+#smritiRudasPanel{
+ max-width:1250px;
+ margin:20px auto;
+ background:#f8fafc;
+ color:#172033;
+ border-radius:24px;
+ padding:26px;
+ box-shadow:0 30px 80px rgba(0,0,0,.25);
+ font-family:Inter,Segoe UI,Arial,sans-serif;
+}
+
+.rg-header{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ gap:20px;
+ margin-bottom:20px;
+}
+
+.rg-header h2{
+ margin:0;
+ font-size:28px;
+}
+
+.rg-header p{
+ margin:6px 0 0;
+ color:#64748b;
+}
+
+.rg-close{
+ border:0;
+ background:#e2e8f0;
+ border-radius:12px;
+ width:44px;
+ height:44px;
+ font-size:22px;
+ cursor:pointer;
+}
+
+.rg-tabs{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-bottom:18px;
+}
+
+.rg-tab{
+ border:1px solid #cbd5e1;
+ background:white;
+ color:#334155;
+ padding:11px 15px;
+ border-radius:12px;
+ cursor:pointer;
+ font-weight:700;
+}
+
+.rg-tab.active{
+ background:#2563eb;
+ color:white;
+ border-color:#2563eb;
+}
+
+.rg-view{
+ display:none;
+}
+
+.rg-view.active{
+ display:block;
+}
+
+.rg-grid{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:14px;
+}
+
+.rg-card{
+ background:white;
+ border:1px solid #e2e8f0;
+ border-radius:17px;
+ padding:18px;
+}
+
+.rg-card h3{
+ margin:0 0 8px;
+}
+
+.rg-muted{
+ color:#64748b;
+ font-size:14px;
+ line-height:1.5;
+}
+
+.rg-input{
+ width:100%;
+ padding:12px;
+ border:1px solid #cbd5e1;
+ border-radius:10px;
+ margin-top:6px;
+ box-sizing:border-box;
+ background:white;
+ color:#172033;
+}
+
+.rg-number{
+ width:100%;
+ box-sizing:border-box;
+ padding:12px;
+ border:1px solid #cbd5e1;
+ border-radius:10px;
+ margin-top:6px;
+}
+
+.rg-primary{
+ border:0;
+ background:#2563eb;
+ color:white;
+ padding:12px 18px;
+ border-radius:11px;
+ font-weight:800;
+ cursor:pointer;
+}
+
+.rg-secondary{
+ border:1px solid #cbd5e1;
+ background:white;
+ color:#334155;
+ padding:12px 18px;
+ border-radius:11px;
+ font-weight:700;
+ cursor:pointer;
+}
+
+.rg-danger{
+ border:0;
+ background:#fee2e2;
+ color:#991b1b;
+ padding:10px 14px;
+ border-radius:10px;
+ cursor:pointer;
+}
+
+.rg-total{
+ font-size:40px;
+ font-weight:900;
+ color:#2563eb;
+}
+
+.rg-domain{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ padding:10px 0;
+ border-bottom:1px solid #e2e8f0;
+}
+
+.rg-bar{
+ height:8px;
+ background:#e2e8f0;
+ border-radius:20px;
+ overflow:hidden;
+ margin-top:8px;
+}
+
+.rg-bar span{
+ display:block;
+ height:100%;
+ background:#2563eb;
+ border-radius:20px;
+}
+
+.rg-session{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+ border:1px solid #e2e8f0;
+ border-radius:13px;
+ padding:12px;
+ margin-bottom:8px;
+}
+
+.rg-session.done{
+ background:#f0fdf4;
+}
+
+.rg-alert{
+ padding:15px;
+ border-radius:14px;
+ background:#fff7ed;
+ border:1px solid #fed7aa;
+ color:#9a3412;
+ margin-bottom:15px;
+ font-weight:700;
+}
+
+.rg-success{
+ padding:15px;
+ border-radius:14px;
+ background:#f0fdf4;
+ border:1px solid #bbf7d0;
+ color:#166534;
+ margin-bottom:15px;
+}
+
+.rg-game{
+ max-width:850px;
+ margin:auto;
+}
+
+.rg-game-box{
+ background:#eff6ff;
+ border:1px solid #bfdbfe;
+ border-radius:20px;
+ padding:25px;
+ margin-top:15px;
+}
+
+.rg-game-options{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;
+ margin-top:18px;
+}
+
+.rg-game-option{
+ min-height:75px;
+ border:2px solid #cbd5e1;
+ background:white;
+ border-radius:15px;
+ cursor:pointer;
+ font-size:18px;
+ font-weight:800;
+ color:#172033;
+}
+
+.rg-game-option:hover{
+ border-color:#2563eb;
+}
+
+.rg-story{
+ display:grid;
+ grid-template-columns:180px 1fr;
+ gap:18px;
+ align-items:start;
+ border:1px solid #e2e8f0;
+ border-radius:18px;
+ padding:16px;
+ background:white;
+ margin-bottom:12px;
+}
+
+.rg-story-photo{
+ width:180px;
+ height:130px;
+ border-radius:14px;
+ background:#dbeafe;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:48px;
+ overflow:hidden;
+}
+
+.rg-story-photo img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+
+.rg-chart-wrap{
+ width:100%;
+ overflow-x:auto;
+}
+
+.rg-chart{
+ width:100%;
+ min-width:650px;
+ height:300px;
+ background:white;
+ border:1px solid #e2e8f0;
+ border-radius:17px;
+}
+
+.rg-small{
+ font-size:12px;
+ color:#64748b;
+}
+
+@media(max-width:800px){
+ .rg-grid{grid-template-columns:1fr}
+ .rg-game-options{grid-template-columns:1fr}
+ .rg-story{grid-template-columns:1fr}
+ .rg-story-photo{width:100%}
+ #smritiRudasPanel{margin:0;padding:18px}
+ #smritiRudasOverlay{padding:8px}
+}
+</style>
+
+<button id="smritiRudasLauncher">🧠 RUDAS & Progress</button>
+
+<div id="smritiRudasOverlay">
+ <div id="smritiRudasPanel">
+
+  <div class="rg-header">
+   <div>
+    <h2>🧠 SmritiAI RUDAS Cognitive Backbone</h2>
+    <p>
+      RUDAS baseline → domain-aligned cognitive activities →
+      session tracking → 7-session reassessment → caregiver trends
+    </p>
+   </div>
+   <button class="rg-close" id="rgClose">×</button>
+  </div>
+
+  <div class="rg-tabs">
+   <button class="rg-tab active" data-rg-tab="baseline">Baseline RUDAS</button>
+   <button class="rg-tab" data-rg-tab="games">Cognitive Games</button>
+   <button class="rg-tab" data-rg-tab="sessions">Sessions</button>
+   <button class="rg-tab" data-rg-tab="graphs">RUDAS Trends</button>
+   <button class="rg-tab" data-rg-tab="stories">Story Mode</button>
+   <button class="rg-tab" data-rg-tab="caregiver">Caregiver</button>
+  </div>
+
+  <!-- BASELINE -->
+  <section class="rg-view active" id="rg-baseline">
+
+   <div class="rg-card">
+    <h3>Actual RUDAS Assessment</h3>
+    <p class="rg-muted">
+      Enter the assessor-recorded RUDAS result. These values are kept
+      separate from game-derived performance.
+    </p>
+
+    <div class="rg-grid">
+
+     <div class="rg-card">
+      <b>Memory</b>
+      <span class="rg-small">Maximum 8</span>
+      <input id="rgMemory" class="rg-number" type="number" min="0" max="8" value="0">
+     </div>
+
+     <div class="rg-card">
+      <b>Orientation</b>
+      <span class="rg-small">Maximum 5</span>
+      <input id="rgOrientation" class="rg-number" type="number" min="0" max="5" value="0">
+     </div>
+
+     <div class="rg-card">
+      <b>Praxis</b>
+      <span class="rg-small">Maximum 2</span>
+      <input id="rgPraxis" class="rg-number" type="number" min="0" max="2" value="0">
+     </div>
+
+     <div class="rg-card">
+      <b>Visuoconstruction</b>
+      <span class="rg-small">Maximum 3</span>
+      <input id="rgVisuo" class="rg-number" type="number" min="0" max="3" value="0">
+     </div>
+
+     <div class="rg-card">
+      <b>Judgment</b>
+      <span class="rg-small">Maximum 4</span>
+      <input id="rgJudgment" class="rg-number" type="number" min="0" max="4" value="0">
+     </div>
+
+     <div class="rg-card">
+      <b>Language</b>
+      <span class="rg-small">Maximum 8</span>
+      <input id="rgLanguage" class="rg-number" type="number" min="0" max="8" value="0">
+     </div>
+
+    </div>
+
+    <br>
+
+    <label>
+      Assessor / caregiver name
+      <input id="rgAssessor" class="rg-input" placeholder="Enter assessor name">
+    </label>
+
+    <br><br>
+
+    <button class="rg-primary" id="rgSaveBaseline">
+      Save Baseline RUDAS
+    </button>
+
+    <button class="rg-secondary" id="rgResetData">
+      Reset Demo Data
+    </button>
+
+    <div id="rgBaselineResult" style="margin-top:15px"></div>
+   </div>
+
+   <br>
+
+   <div class="rg-grid" id="rgBaselineCards"></div>
+
+  </section>
+
+  <!-- GAMES -->
+  <section class="rg-view" id="rg-games">
+
+   <div class="rg-card rg-game">
+
+    <h3>🎮 RUDAS-Aligned Cognitive Session</h3>
+
+    <p class="rg-muted">
+      Every completed activity contributes supporting performance data
+      to its corresponding RUDAS domain. The game has no level limit.
+    </p>
+
+    <div class="rg-success">
+      Completed sessions:
+      <strong id="rgGameSessionCount">0</strong>
+      &nbsp; | &nbsp;
+      Next RUDAS reassessment:
+      <strong id="rgNextRudas">7</strong>
+    </div>
+
+    <div class="rg-game-box">
+
+     <div id="rgGameDomain"
+          style="font-weight:900;color:#2563eb">
+     </div>
+
+     <h2 id="rgGameQuestion">
+       Press Start Session
+     </h2>
+
+     <div id="rgGameProgress" class="rg-muted"></div>
+
+     <div id="rgGameOptions" class="rg-game-options"></div>
+
+     <div style="margin-top:18px">
+      <button class="rg-primary" id="rgStartGame">
+       ▶ Start Cognitive Session
+      </button>
+     </div>
+
+     <div id="rgGameResult" style="margin-top:15px"></div>
+
+    </div>
+
+   </div>
+
+  </section>
+
+  <!-- SESSIONS -->
+  <section class="rg-view" id="rg-sessions">
+
+   <div id="rgAssessmentAlert"></div>
+
+   <div class="rg-card">
+    <h3>Session History</h3>
+    <div id="rgSessionHistory"></div>
+   </div>
+
+  </section>
+
+  <!-- GRAPHS -->
+  <section class="rg-view" id="rg-graphs">
+
+   <div class="rg-card">
+    <h3>📈 RUDAS Longitudinal Trend</h3>
+
+    <p class="rg-muted">
+      Actual RUDAS assessments recorded at baseline and reassessment
+      checkpoints are shown as the clinical RUDAS series.
+    </p>
+
+    <div id="rgGraphArea"></div>
+
+   </div>
+
+  </section>
+
+  <!-- STORIES -->
+  <section class="rg-view" id="rg-stories">
+
+   <div class="rg-grid">
+
+    <div class="rg-card">
+     <h3>📷 Create Memory Story</h3>
+
+     <label>
+      Story title
+      <input id="rgStoryTitle" class="rg-input"
+             placeholder="Example: Daughter's wedding">
+     </label>
+
+     <br>
+
+     <label>
+      Story / memory
+      <textarea id="rgStoryText"
+        class="rg-input"
+        rows="6"
+        placeholder="Tell SmritiAI what happened in this memory..."></textarea>
+     </label>
+
+     <br>
+
+     <label>
+      Photo
+      <input id="rgStoryPhoto" class="rg-input"
+             type="file" accept="image/*">
+     </label>
+
+     <br>
+
+     <button class="rg-primary" id="rgSaveStory">
+      Save Memory Story
+     </button>
+
+     <div id="rgStoryMessage" style="margin-top:12px"></div>
+    </div>
+
+    <div class="rg-card">
+     <h3>🧠 How Story Recall Works</h3>
+     <p class="rg-muted">
+       The patient can tap a saved photo whenever they need a cue.
+       SmritiAI can replay the stored story and then optionally ask
+       a recall question.
+     </p>
+
+     <div class="rg-success">
+       Story recall is recorded as supporting memory/language evidence.
+       It is not converted into an artificial RUDAS score.
+     </div>
+    </div>
+
+   </div>
+
+   <br>
+
+   <div class="rg-card">
+    <h3>Saved Memories</h3>
+    <div id="rgStoryList"></div>
+   </div>
+
+  </section>
+
+  <!-- CAREGIVER -->
+  <section class="rg-view" id="rg-caregiver">
+
+   <div id="rgCaregiverAlert"></div>
+
+   <div class="rg-grid">
+
+    <div class="rg-card">
+     <div class="rg-muted">Latest RUDAS</div>
+     <div class="rg-total" id="rgCareTotal">—</div>
+     <div class="rg-muted">out of 30</div>
+    </div>
+
+    <div class="rg-card">
+     <div class="rg-muted">Completed Sessions</div>
+     <div class="rg-total" id="rgCareSessions">0</div>
+    </div>
+
+    <div class="rg-card">
+     <div class="rg-muted">Next RUDAS</div>
+     <div class="rg-total" id="rgCareNext">7</div>
+    </div>
+
+   </div>
+
+   <br>
+
+   <div class="rg-card">
+    <h3>Patient RUDAS Profile</h3>
+    <div id="rgCareDomains"></div>
+   </div>
+
+   <br>
+
+   <div class="rg-card">
+    <h3>Story Memory Evidence</h3>
+    <div id="rgCareStories"></div>
+   </div>
+
+  </section>
+
+ </div>
+</div>
+
+<script>
+/* ============================================================
+   SMRITI_RUDAS_BACKBONE_V2
+   ============================================================ */
+
+(function(){
+
+"use strict";
+
+const KEY="SMRITI_RUDAS_BACKBONE_V2";
+
+const MAX={
+ memory:8,
+ orientation:5,
+ praxis:2,
+ visuoconstruction:3,
+ judgment:4,
+ language:8
+};
+
+const DOMAIN_LABEL={
+ memory:"Memory",
+ orientation:"Orientation",
+ praxis:"Praxis",
+ visuoconstruction:"Visuoconstruction",
+ judgment:"Judgment",
+ language:"Language"
+};
+
+const DOMAIN_ICON={
+ memory:"🧠",
+ orientation:"🧭",
+ praxis:"✋",
+ visuoconstruction:"🧩",
+ judgment:"⚖️",
+ language:"🗣️"
+};
+
+let data={
+ baseline:null,
+ assessments:[],
+ sessions:[],
+ stories:[],
+ gameSession:null
+};
+
+function load(){
+ try{
+   const raw=localStorage.getItem(KEY);
+   if(raw){
+     const parsed=JSON.parse(raw);
+     data=Object.assign(data,parsed);
+   }
+ }catch(e){}
+}
+
+function save(){
+ try{
+   localStorage.setItem(KEY,JSON.stringify(data));
+ }catch(e){}
+}
+
+function esc(v){
+ return String(v??"")
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+}
+
+function today(){
+ return new Date().toLocaleDateString("en-IN",{
+   day:"2-digit",
+   month:"short",
+   year:"numeric"
+ });
+}
+
+function total(r){
+ return Number(r.memory||0)+
+        Number(r.orientation||0)+
+        Number(r.praxis||0)+
+        Number(r.visuoconstruction||0)+
+        Number(r.judgment||0)+
+        Number(r.language||0);
+}
+
+function clamp(v,max){
+ v=Number(v);
+ if(!Number.isFinite(v))v=0;
+ return Math.max(0,Math.min(max,v));
+}
+
+/* ------------------------------------------------------------
+   UI
+------------------------------------------------------------ */
+
+const overlay=document.getElementById("smritiRudasOverlay");
+
+document.getElementById("smritiRudasLauncher")
+ .addEventListener("click",()=>{
+   overlay.style.display="block";
+   refreshAll();
+ });
+
+document.getElementById("rgClose")
+ .addEventListener("click",()=>{
+   overlay.style.display="none";
+ });
+
+document.querySelectorAll(".rg-tab").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+   document.querySelectorAll(".rg-tab")
+    .forEach(x=>x.classList.remove("active"));
+
+   document.querySelectorAll(".rg-view")
+    .forEach(x=>x.classList.remove("active"));
+
+   btn.classList.add("active");
+
+   const target=document.getElementById(
+     "rg-"+btn.dataset.rgTab
+   );
+
+   if(target)target.classList.add("active");
+
+   refreshAll();
+ });
+});
+
+/* ------------------------------------------------------------
+   BASELINE RUDAS
+------------------------------------------------------------ */
+
+document.getElementById("rgSaveBaseline")
+ .addEventListener("click",()=>{
+
+   const r={
+     memory:clamp(document.getElementById("rgMemory").value,8),
+     orientation:clamp(document.getElementById("rgOrientation").value,5),
+     praxis:clamp(document.getElementById("rgPraxis").value,2),
+     visuoconstruction:clamp(document.getElementById("rgVisuo").value,3),
+     judgment:clamp(document.getElementById("rgJudgment").value,4),
+     language:clamp(document.getElementById("rgLanguage").value,8)
+   };
+
+   const assessor=
+     document.getElementById("rgAssessor").value.trim() ||
+     "Assessor";
+
+   const record={
+     id:Date.now(),
+     date:today(),
+     session:0,
+     assessor:assessor,
+     scores:r,
+     total:total(r)
+   };
+
+   if(data.baseline){
+     data.assessments=data.assessments.filter(
+       x=>x.session!==0
+     );
+   }
+
+   data.baseline=record;
+
+   data.assessments=[
+     record,
+     ...data.assessments.filter(x=>x.session!==0)
+   ];
+
+   save();
+   refreshAll();
+
+   document.getElementById("rgBaselineResult").innerHTML=
+    '<div class="rg-success">'+
+    'Baseline RUDAS saved: <strong>'+
+    record.total+
+    '/30</strong>. Game performance will now be tracked against the six RUDAS-aligned domains.'+
+    '</div>';
+ });
+
+/* ------------------------------------------------------------
+   RESET
+------------------------------------------------------------ */
+
+document.getElementById("rgResetData")
+ .addEventListener("click",()=>{
+
+   if(!confirm(
+     "Reset SmritiAI RUDAS demo data? This removes baseline, sessions, assessments and stories."
+   ))return;
+
+   data={
+     baseline:null,
+     assessments:[],
+     sessions:[],
+     stories:[],
+     gameSession:null
+   };
+
+   save();
+   refreshAll();
+
+   alert("RUDAS demo data reset.");
+ });
+
+/* ------------------------------------------------------------
+   COGNITIVE GAME ENGINE
+------------------------------------------------------------ */
+
+const GAME_BANK=[
+
+ {
+   domain:"memory",
+   question:"Remember these three objects: APPLE, KEY, BOOK. Which object was shown?",
+   options:["APPLE","CAR","TREE","SHOE"],
+   answer:"APPLE"
+ },
+
+ {
+   domain:"memory",
+   question:"Remember: BLUE, 7, FLOWER. Which word was in the sequence?",
+   options:["FLOWER","TABLE","HORSE","RIVER"],
+   answer:"FLOWER"
+ },
+
+ {
+   domain:"orientation",
+   question:"Which month are we currently in?",
+   options:[
+     new Date().toLocaleString("en-US",{month:"long"}),
+     "January",
+     "March",
+     "December"
+   ],
+   answer:new Date().toLocaleString("en-US",{month:"long"})
+ },
+
+ {
+   domain:"orientation",
+   question:"Which part of the day is normally associated with breakfast?",
+   options:["Morning","Midnight","Late night","None"],
+   answer:"Morning"
+ },
+
+ {
+   domain:"praxis",
+   question:"Which action would normally be used to open a door?",
+   options:["Turn a handle","Eat a spoon","Wear a shoe on your hand","Read a cup"],
+   answer:"Turn a handle"
+ },
+
+ {
+   domain:"praxis",
+   question:"Which sequence makes sense when drinking water?",
+   options:[
+     "Pick up glass → drink",
+     "Drink → pick up glass",
+     "Put glass away → find glass",
+     "Sleep → drink → pick up"
+   ],
+   answer:"Pick up glass → drink"
+ },
+
+ {
+   domain:"visuoconstruction",
+   question:"Which shape has four equal sides?",
+   options:["Square","Triangle","Circle","Line"],
+   answer:"Square"
+ },
+
+ {
+   domain:"visuoconstruction",
+   question:"Which pattern continues: ▲ ● ▲ ● ?",
+   options:["▲","■","◆","●"],
+   answer:"▲"
+ },
+
+ {
+   domain:"judgment",
+   question:"You smell smoke coming from the kitchen. What should you do first?",
+   options:[
+     "Check the situation safely / seek help",
+     "Ignore it",
+     "Go to sleep",
+     "Hide the smoke"
+   ],
+   answer:"Check the situation safely / seek help"
+ },
+
+ {
+   domain:"judgment",
+   question:"You find a medicine bottle with an unknown label. What is safest?",
+   options:[
+     "Ask a caregiver/professional before taking it",
+     "Take extra medicine",
+     "Guess the dose",
+     "Give it to someone else"
+   ],
+   answer:"Ask a caregiver/professional before taking it"
+ },
+
+ {
+   domain:"language",
+   question:"Which word belongs with APPLE, BANANA and ORANGE?",
+   options:["MANGO","CHAIR","SHOE","WINDOW"],
+   answer:"MANGO"
+ },
+
+ {
+   domain:"language",
+   question:"Which word is a fruit?",
+   options:["Mango","Table","Pencil","Door"],
+   answer:"Mango"
+ }
+
+];
+
+let gameIndex=0;
+let gameAnswers=[];
+let gameStart=0;
+
+function startGame(){
+
+ if(!data.baseline){
+   document.getElementById("rgGameResult").innerHTML=
+    '<div class="rg-alert">Complete the baseline RUDAS assessment first.</div>';
+   return;
+ }
+
+ gameIndex=0;
+ gameAnswers=[];
+ gameStart=Date.now();
+
+ data.gameSession={
+   started:Date.now(),
+   answers:[]
+ };
+
+ document.getElementById("rgStartGame").style.display="none";
+
+ renderGameQuestion();
+}
+
+function renderGameQuestion(){
+
+ const q=GAME_BANK[gameIndex];
+
+ document.getElementById("rgGameDomain").textContent=
+   DOMAIN_ICON[q.domain]+" "+DOMAIN_LABEL[q.domain];
+
+ document.getElementById("rgGameQuestion").textContent=q.question;
+
+ document.getElementById("rgGameProgress").textContent=
+   "Activity "+(gameIndex+1)+" of "+GAME_BANK.length+
+   " • Continuous RUDAS-aligned session";
+
+ const box=document.getElementById("rgGameOptions");
+ box.innerHTML="";
+
+ q.options.forEach(option=>{
+
+   const btn=document.createElement("button");
+
+   btn.type="button";
+   btn.className="rg-game-option";
+   btn.textContent=option;
+
+   btn.addEventListener("click",()=>{
+      answerGame(option);
+   });
+
+   box.appendChild(btn);
+ });
+}
+
+function answerGame(answer){
+
+ const q=GAME_BANK[gameIndex];
+
+ const correct=
+   String(answer)===String(q.answer);
+
+ const responseTime=
+   Math.round((Date.now()-gameStart)/100)/10;
+
+ gameAnswers.push({
+   domain:q.domain,
+   correct:correct,
+   responseTime:responseTime
+ });
+
+ if(data.gameSession){
+   data.gameSession.answers.push({
+     domain:q.domain,
+     correct:correct,
+     responseTime:responseTime
+   });
+ }
+
+ gameIndex++;
+
+ gameStart=Date.now();
+
+ if(gameIndex>=GAME_BANK.length){
+   finishGame();
+ }else{
+   renderGameQuestion();
+ }
+}
+
+function finishGame(){
+
+ const domainResults={};
+
+ Object.keys(DOMAIN_LABEL).forEach(d=>{
+   domainResults[d]={
+     correct:0,
+     total:0,
+     accuracy:0,
+     responseTime:0
+   };
+ });
+
+ gameAnswers.forEach(a=>{
+   const r=domainResults[a.domain];
+   r.total++;
+   if(a.correct)r.correct++;
+   r.responseTime+=a.responseTime;
+ });
+
+ Object.keys(domainResults).forEach(d=>{
+   const r=domainResults[d];
+
+   if(r.total){
+     r.accuracy=Math.round(
+       (r.correct/r.total)*100
+     );
+
+     r.responseTime=Math.round(
+       (r.responseTime/r.total)*10
+     )/10;
+   }
+ });
+
+ const sessionNumber=data.sessions.length+1;
+
+ const record={
+   id:Date.now(),
+   session:sessionNumber,
+   date:today(),
+   domains:domainResults
+ };
+
+ data.sessions.push(record);
+
+ save();
+
+ document.getElementById("rgGameResult").innerHTML=
+   '<div class="rg-success">'+
+   '<strong>Session '+sessionNumber+' completed.</strong><br>'+
+   'Your six RUDAS-aligned activity domains have been recorded. '+
+   (sessionNumber%7===0
+     ?"RUDAS reassessment is now due for the caregiver/assessor."
+     :"The next activities will continue automatically at the next session.")+
+   '</div>';
+
+ document.getElementById("rgStartGame").style.display="inline-block";
+
+ document.getElementById("rgGameOptions").innerHTML="";
+
+ document.getElementById("rgGameQuestion").textContent=
+   "Session complete";
+
+ document.getElementById("rgGameProgress").textContent=
+   "Session "+sessionNumber+
+   " saved • No level limit";
+
+ refreshAll();
+}
+
+document.getElementById("rgStartGame")
+ .addEventListener("click",startGame);
+
+/* ------------------------------------------------------------
+   RUDAS REASSESSMENT
+------------------------------------------------------------ */
+
+function assessmentDue(){
+
+ if(data.sessions.length===0)return false;
+
+ return data.sessions.length%7===0;
+}
+
+function nextRudas(){
+
+ const n=data.sessions.length;
+
+ if(n===0)return 7;
+
+ return Math.ceil((n+0.001)/7)*7;
+}
+
+/* ------------------------------------------------------------
+   BASELINE DISPLAY
+------------------------------------------------------------ */
+
+function renderBaseline(){
+
+ const area=document.getElementById("rgBaselineCards");
+
+ if(!data.baseline){
+   area.innerHTML=
+    '<div class="rg-card">'+
+    '<h3>No baseline RUDAS recorded</h3>'+
+    '<p class="rg-muted">Enter the assessor-recorded baseline above before starting cognitive sessions.</p>'+
+    '</div>';
+   return;
+ }
+
+ const b=data.baseline;
+
+ area.innerHTML=
+  '<div class="rg-card">'+
+  '<div class="rg-muted">Baseline RUDAS</div>'+
+  '<div class="rg-total">'+b.total+'/30</div>'+
+  '<div class="rg-muted">'+esc(b.date)+' • '+esc(b.assessor)+'</div>'+
+  '</div>'+
+  Object.keys(MAX).map(d=>{
+    const value=b.scores[d];
+    return '<div class="rg-card">'+
+      '<b>'+DOMAIN_ICON[d]+' '+DOMAIN_LABEL[d]+'</b>'+
+      '<div class="rg-total" style="font-size:30px">'+
+      value+'/'+MAX[d]+
+      '</div>'+
+      '<div class="rg-bar"><span style="width:'+
+      ((value/MAX[d])*100)+'%"></span></div>'+
+      '</div>';
+  }).join("");
+}
+
+/* ------------------------------------------------------------
+   SESSION HISTORY
+------------------------------------------------------------ */
+
+function renderSessions(){
+
+ const area=document.getElementById("rgSessionHistory");
+
+ if(!data.sessions.length){
+   area.innerHTML=
+    '<p class="rg-muted">No cognitive sessions completed yet.</p>';
+ }else{
+
+   area.innerHTML=data.sessions
+    .slice()
+    .reverse()
+    .map(s=>{
+
+      const checkpoint=s.session%7===0;
+
+      return '<div class="rg-session '+(checkpoint?"done":"")+'">'+
+       '<div>'+
+       '<strong>Session '+s.session+'</strong>'+
+       '<div class="rg-small">'+esc(s.date)+'</div>'+
+       '</div>'+
+       '<div>'+
+       (checkpoint
+         ?"🔔 RUDAS reassessment due"
+         :"RUDAS-aligned performance recorded")+
+       '</div>'+
+       '</div>';
+
+    }).join("");
+ }
+
+ const alert=document.getElementById("rgAssessmentAlert");
+
+ if(assessmentDue()){
+   alert.innerHTML=
+    '<div class="rg-alert">'+
+    '🔔 <strong>RUDAS Assessment Due</strong><br>'+
+    'The patient has completed '+data.sessions.length+
+    ' cognitive sessions. A new actual RUDAS assessment should now be administered and recorded by the appropriate assessor.'+
+    '</div>';
+ }else{
+   alert.innerHTML=
+    '<div class="rg-success">'+
+    'Next RUDAS reassessment checkpoint: session '+
+    nextRudas()+
+    '</div>';
+ }
+}
+
+/* ------------------------------------------------------------
+   SVG LINE GRAPHS
+------------------------------------------------------------ */
+
+function makeGraph(domain){
+
+ const width=850;
+ const height=300;
+ const pad=48;
+
+ const records=data.assessments
+   .slice()
+   .sort((a,b)=>a.session-b.session);
+
+ if(!records.length){
+   return '<div class="rg-card">'+
+    '<p class="rg-muted">No actual RUDAS assessment data yet.</p>'+
+    '</div>';
+ }
+
+ const max=MAX[domain];
+
+ const points=records.map((r,i)=>{
+
+   const x=
+     records.length===1
+      ?width/2
+      :pad+
+       (i/(records.length-1))*
+       (width-pad*2);
+
+   const y=
+     height-pad-
+     (r.scores[domain]/max)*
+     (height-pad*2);
+
+   return {
+     x:x,
+     y:y,
+     value:r.scores[domain],
+     session:r.session
+   };
+ });
+
+ const poly=points
+   .map(p=>p.x+","+p.y)
+   .join(" ");
+
+ let svg=
+ '<svg class="rg-chart" viewBox="0 0 '+width+' '+height+
+ '" role="img" aria-label="'+DOMAIN_LABEL[domain]+' RUDAS trend">';
+
+ /* grid */
+
+ for(let i=0;i<=max;i++){
+
+   const y=
+     height-pad-
+     (i/max)*
+     (height-pad*2);
+
+   svg+=
+    '<line x1="'+pad+'" y1="'+y+
+    '" x2="'+(width-pad)+'" y2="'+y+
+    '" stroke="#e2e8f0" />';
+
+   svg+=
+    '<text x="8" y="'+(y+5)+
+    '" fill="#64748b" font-size="12">'+
+    i+'</text>';
+ }
+
+ svg+=
+  '<polyline points="'+poly+
+  '" fill="none" stroke="#2563eb" stroke-width="4" />';
+
+ points.forEach(p=>{
+   svg+=
+    '<circle cx="'+p.x+'" cy="'+p.y+
+    '" r="6" fill="#2563eb" />';
+
+   svg+=
+    '<text x="'+p.x+
+    '" y="'+(height-15)+
+    '" text-anchor="middle" fill="#64748b" font-size="11">'+
+    "S"+p.session+
+    '</text>';
+
+   svg+=
+    '<text x="'+p.x+
+    '" y="'+(p.y-10)+
+    '" text-anchor="middle" fill="#172033" font-size="12" font-weight="700">'+
+    p.value+"/"+max+
+    '</text>';
+ });
+
+ svg+='</svg>';
+
+ return svg;
+}
+
+function renderGraphs(){
+
+ const area=document.getElementById("rgGraphArea");
+
+ if(!data.assessments.length){
+   area.innerHTML=
+    '<div class="rg-alert">No RUDAS assessment has been recorded yet.</div>';
+   return;
+ }
+
+ area.innerHTML=
+   '<div class="rg-card">'+
+   '<h3>Overall RUDAS Total</h3>'+
+   makeTotalGraph()+
+   '</div><br>'+
+   Object.keys(MAX).map(d=>
+    '<div class="rg-card" style="margin-bottom:14px">'+
+    '<h3>'+DOMAIN_ICON[d]+' '+DOMAIN_LABEL[d]+
+    ' <span class="rg-small">/'+MAX[d]+'</span></h3>'+
+    makeGraph(d)+
+    '</div>'
+   ).join("");
+}
+
+function makeTotalGraph(){
+
+ const width=850;
+ const height=300;
+ const pad=48;
+ const max=30;
+
+ const records=data.assessments
+   .slice()
+   .sort((a,b)=>a.session-b.session);
+
+ const points=records.map((r,i)=>{
+
+   const x=
+     records.length===1
+      ?width/2
+      :pad+
+       (i/(records.length-1))*
+       (width-pad*2);
+
+   const y=
+     height-pad-
+     (r.total/max)*
+     (height-pad*2);
+
+   return {
+     x:x,
+     y:y,
+     value:r.total,
+     session:r.session
+   };
+ });
+
+ const poly=points.map(
+   p=>p.x+","+p.y
+ ).join(" ");
+
+ let svg=
+ '<svg class="rg-chart" viewBox="0 0 '+width+' '+height+
+ '">';
+
+ [0,5,10,15,20,25,30].forEach(v=>{
+
+   const y=
+    height-pad-
+    (v/max)*
+    (height-pad*2);
+
+   svg+=
+    '<line x1="'+pad+'" y1="'+y+
+    '" x2="'+(width-pad)+'" y2="'+y+
+    '" stroke="#e2e8f0" />';
+
+   svg+=
+    '<text x="8" y="'+(y+5)+
+    '" fill="#64748b" font-size="12">'+v+'</text>';
+ });
+
+ svg+=
+  '<polyline points="'+poly+
+  '" fill="none" stroke="#2563eb" stroke-width="4" />';
+
+ points.forEach(p=>{
+   svg+=
+    '<circle cx="'+p.x+'" cy="'+p.y+
+    '" r="6" fill="#2563eb" />';
+
+   svg+=
+    '<text x="'+p.x+
+    '" y="'+(p.y-10)+
+    '" text-anchor="middle" fill="#172033" font-size="12" font-weight="700">'+
+    p.value+'/30</text>';
+
+   svg+=
+    '<text x="'+p.x+
+    '" y="'+(height-15)+
+    '" text-anchor="middle" fill="#64748b" font-size="11">'+
+    "S"+p.session+
+    '</text>';
+ });
+
+ svg+='</svg>';
+
+ return svg;
+}
+
+/* ------------------------------------------------------------
+   STORY MODE
+------------------------------------------------------------ */
+
+document.getElementById("rgSaveStory")
+ .addEventListener("click",()=>{
+
+   const title=
+    document.getElementById("rgStoryTitle").value.trim();
+
+   const story=
+    document.getElementById("rgStoryText").value.trim();
+
+   if(!title||!story){
+     document.getElementById("rgStoryMessage").innerHTML=
+      '<div class="rg-alert">Enter both a story title and story.</div>';
+     return;
+   }
+
+   const file=
+    document.getElementById("rgStoryPhoto").files[0];
+
+   const finish=(photo)=>{
+
+     data.stories.push({
+       id:Date.now(),
+       title:title,
+       story:story,
+       photo:photo||"",
+       created:today(),
+       recalls:0,
+       independent:0,
+       cued:0
+     });
+
+     save();
+
+     document.getElementById("rgStoryTitle").value="";
+     document.getElementById("rgStoryText").value="";
+     document.getElementById("rgStoryPhoto").value="";
+
+     document.getElementById("rgStoryMessage").innerHTML=
+      '<div class="rg-success">Memory story saved successfully.</div>';
+
+     refreshAll();
+   };
+
+   if(file){
+
+     const reader=new FileReader();
+
+     reader.onload=()=>{
+       finish(reader.result);
+     };
+
+     reader.readAsDataURL(file);
+
+   }else{
+     finish("");
+   }
+ });
+
+function speak(text){
+
+ if("speechSynthesis" in window){
+
+   window.speechSynthesis.cancel();
+
+   const utter=new SpeechSynthesisUtterance(text);
+
+   utter.rate=.9;
+   utter.pitch=1;
+
+   window.speechSynthesis.speak(utter);
+
+ }else{
+   alert(text);
+ }
+}
+
+function renderStories(){
+
+ const area=document.getElementById("rgStoryList");
+
+ if(!data.stories.length){
+   area.innerHTML=
+    '<p class="rg-muted">No memory stories saved yet.</p>';
+   return;
+ }
+
+ area.innerHTML=data.stories.map(s=>{
+
+   const photo=s.photo
+    ?'<img src="'+s.photo+'" alt="'+esc(s.title)+'">'
+    :"📷";
+
+   return '<div class="rg-story">'+
+
+    '<div class="rg-story-photo">'+photo+'</div>'+
+
+    '<div>'+
+    '<h3>'+esc(s.title)+'</h3>'+
+    '<p class="rg-muted">'+
+    esc(s.story)+
+    '</p>'+
+
+    '<button class="rg-primary" data-story-hear="'+s.id+'">'+
+    '🔊 Hear Story'+
+    '</button> '+
+
+    '<button class="rg-secondary" data-story-recall="'+s.id+'">'+
+    '🧠 Recall Story'+
+    '</button>'+
+
+    '<div class="rg-small" style="margin-top:8px">'+
+    'Independent recalls: '+s.independent+
+    ' • Cued recalls: '+s.cued+
+    '</div>'+
+
+    '</div>'+
+
+   '</div>';
+
+ }).join("");
+
+ document.querySelectorAll("[data-story-hear]")
+ .forEach(btn=>{
+   btn.addEventListener("click",()=>{
+
+     const s=data.stories.find(
+       x=>String(x.id)===btn.dataset.storyHear
+     );
+
+     if(s)speak(s.story);
+   });
+ });
+
+ document.querySelectorAll("[data-story-recall]")
+ .forEach(btn=>{
+   btn.addEventListener("click",()=>{
+
+     const s=data.stories.find(
+       x=>String(x.id)===btn.dataset.storyRecall
+     );
+
+     if(!s)return;
+
+     const answer=prompt(
+       "Story Recall:\n\n"+
+       "Tell or type what you remember about this story.\n\n"+
+       "Leave blank if you cannot recall it."
+     );
+
+     s.recalls++;
+
+     if(answer&&answer.trim()){
+       s.independent++;
+       alert("Recall recorded as independent memory recall.");
+     }else{
+       s.cued++;
+       speak(s.story);
+       alert("Cue provided. This recall is recorded as cued recall.");
+     }
+
+     save();
+     refreshAll();
+   });
+ });
+}
+
+/* ------------------------------------------------------------
+   CAREGIVER
+------------------------------------------------------------ */
+
+function latestAssessment(){
+
+ if(!data.assessments.length)return null;
+
+ return data.assessments
+  .slice()
+  .sort((a,b)=>b.session-a.session)[0];
+}
+
+function renderCaregiver(){
+
+ const latest=latestAssessment();
+
+ document.getElementById("rgCareTotal").textContent=
+   latest ? latest.total+"/30" : "—";
+
+ document.getElementById("rgCareSessions").textContent=
+   data.sessions.length;
+
+ document.getElementById("rgCareNext").textContent=
+   nextRudas();
+
+ const alert=document.getElementById("rgCaregiverAlert");
+
+ if(assessmentDue()){
+   alert.innerHTML=
+    '<div class="rg-alert">'+
+    '🔔 RUDAS ASSESSMENT DUE — '+
+    data.sessions.length+
+    ' sessions completed since the last checkpoint.'+
+    '</div>';
+ }else{
+   alert.innerHTML=
+    '<div class="rg-success">'+
+    'Patient is currently at session '+
+    data.sessions.length+
+    '. Next RUDAS checkpoint: session '+
+    nextRudas()+
+    '.</div>';
+ }
+
+ const domains=document.getElementById("rgCareDomains");
+
+ if(!latest){
+
+   domains.innerHTML=
+    '<p class="rg-muted">No RUDAS assessment recorded.</p>';
+
+ }else{
+
+   domains.innerHTML=
+    Object.keys(MAX).map(d=>{
+
+      const value=latest.scores[d];
+
+      return '<div class="rg-domain">'+
+       '<div>'+
+       DOMAIN_ICON[d]+" "+
+       '<strong>'+DOMAIN_LABEL[d]+'</strong>'+
+       '<div class="rg-bar" style="width:260px">'+
+       '<span style="width:'+
+       ((value/MAX[d])*100)+'%"></span>'+
+       '</div>'+
+       '</div>'+
+       '<strong>'+value+'/'+MAX[d]+'</strong>'+
+       '</div>';
+
+    }).join("")+
+    '<div style="margin-top:18px;font-size:22px;font-weight:900">'+
+    'Total RUDAS: '+latest.total+'/30'+
+    '</div>';
+ }
+
+ const stories=document.getElementById("rgCareStories");
+
+ if(!data.stories.length){
+
+   stories.innerHTML=
+    '<p class="rg-muted">No story memories recorded.</p>';
+
+ }else{
+
+   const totalStories=data.stories.length;
+
+   const independent=data.stories.reduce(
+    (a,s)=>a+s.independent,0
+   );
+
+   const cued=data.stories.reduce(
+    (a,s)=>a+s.cued,0
+   );
+
+   stories.innerHTML=
+    '<div class="rg-grid">'+
+    '<div class="rg-card">'+
+    '<div class="rg-muted">Stories stored</div>'+
+    '<div class="rg-total">'+totalStories+'</div>'+
+    '</div>'+
+    '<div class="rg-card">'+
+    '<div class="rg-muted">Independent recall</div>'+
+    '<div class="rg-total">'+independent+'</div>'+
+    '</div>'+
+    '<div class="rg-card">'+
+    '<div class="rg-muted">Cued recall</div>'+
+    '<div class="rg-total">'+cued+'</div>'+
+    '</div>'+
+    '</div>'+
+    '<p class="rg-muted" style="margin-top:15px">'+
+    'Story recall is supporting memory/language evidence and is not presented as an official RUDAS score.'+
+    '</p>';
+ }
+}
+
+/* ------------------------------------------------------------
+   REFRESH
+------------------------------------------------------------ */
+
+function refreshAll(){
+
+ renderBaseline();
+ renderSessions();
+ renderGraphs();
+ renderStories();
+ renderCaregiver();
+
+ document.getElementById("rgGameSessionCount").textContent=
+   data.sessions.length;
+
+ document.getElementById("rgNextRudas").textContent=
+   nextRudas();
+}
+
+/* ------------------------------------------------------------
+   INITIALIZATION
+------------------------------------------------------------ */
+
+load();
+refreshAll();
+
+})();
+</script>
+
+<!-- SMRITI_RUDAS_BACKBONE_V2_END -->
+</body>
+</html>
+
+

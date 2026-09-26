@@ -1,0 +1,68 @@
+
+name: smritiai
+description: Dementia-friendly memory and caregiver support application.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  audioplayers: ^6.5.0
+  flutter:
+  assets:
+    - assets/audio/
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # Production authentication/database/cloud storage.
+  supabase_flutter: ^2.8.0
+
+  # Durable device persistence.
+  shared_preferences: ^2.5.3
+
+  # Stable IDs.
+  uuid: ^4.5.1
+
+  # Connectivity-aware synchronization.
+  connectivity_plus: ^6.1.4
+
+  # Android/local notifications.
+  flutter_local_notifications: ^19.4.0
+  timezone: ^0.10.1
+
+  # Photos/camera.
+  image_picker: ^1.1.2
+  camera: ^0.11.1
+
+  # Audio recording.
+  record: ^6.0.0
+
+  # Voice output.
+  flutter_tts: ^4.2.3
+
+  # Speech recognition.
+  speech_to_text: ^7.0.0
+
+  # Runtime permissions.
+  permission_handler: ^12.0.1
+
+  # Secure local secrets/token support.
+  flutter_secure_storage: ^9.2.4
+
+  # Network/image caching.
+  cached_network_image: ^3.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
